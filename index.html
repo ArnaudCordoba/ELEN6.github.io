@@ -60,10 +60,9 @@
   .sub{color:var(--muted);font-size:14px;font-style:italic}
 
   .filters{
-    display:flex;gap:8px;overflow-x:auto;padding:14px 18px 6px;
-    scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+    padding:12px 14px 4px;max-width:620px;margin:0 auto;
   }
-  .filters::-webkit-scrollbar{display:none}
   .chip{
     flex:0 0 auto;border:1px solid var(--line);background:var(--panel);
     color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:12px;
@@ -76,7 +75,7 @@
   .stage{width:100%;max-width:560px;perspective:1600px}
 
   .card{
-    position:relative;width:100%;min-height:62dvh;
+    position:relative;width:100%;min-height:48dvh;
     border-radius:22px;cursor:pointer;
     transition:transform .12s ease;
   }
@@ -85,7 +84,7 @@
     border-radius:22px;border:1px solid var(--line);
     background:linear-gradient(160deg,var(--panel2),var(--panel));
     box-shadow:var(--shadow);
-    padding:26px 24px;min-height:62dvh;
+    padding:22px 22px;min-height:48dvh;
     display:flex;flex-direction:column;
     animation:rise .42s cubic-bezier(.2,.8,.2,1);
   }
