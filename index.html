@@ -143,7 +143,7 @@
 <header>
   <div class="kicker">IUT Montpellier · BUT3 GEII–ESE</div>
   <h1>Capteurs &amp; <em>Microsystèmes</em></h1>
-  <div class="sub">Fiches de révision — TD2 · TD3 · TD4 · TD6 + Millman</div>
+  <div class="sub">Formules &amp; notions à connaître — par thème</div>
 </header>
 
 <div class="filters" id="filters"></div>
@@ -173,114 +173,80 @@
 <!-- ============ DONNÉES DES CARTES (LaTeX en clair) ============ -->
 <div id="source" style="display:none">
 
-  <!-- ===== CONCEPTS GÉNÉRAUX + AOP ===== -->
-  <div class="fc" data-cat="Concepts"><div class="q">Capteur <b>passif</b> vs capteur <b>actif</b> ?</div><div class="a"><span class="lead">Réponse</span><b>Passif</b> : la sortie est une <b>impédance</b> ($R$, $L$, $C$) qui varie avec le mesurande → il faut une source + un conditionneur pour la lire (Pt100, jauge…). <b>Actif</b> : génère directement une tension/courant (thermocouple, piézo).</div></div>
+  <!-- ===== GÉNÉRALITÉS ===== -->
+  <div class="fc" data-cat="Généralités"><div class="q">Définition de la <b>sensibilité</b> $S$ ?</div><div class="a"><span class="lead">Définition</span><span class="box">$S = \dfrac{d(\text{sortie})}{d(\text{mesurande})}$</span>C'est la <b>pente</b> de la caractéristique : de combien la sortie bouge par unité de mesurande.</div></div>
 
-  <div class="fc" data-cat="Concepts"><div class="q">À quoi sert un <b>conditionneur</b> ?</div><div class="a"><span class="lead">Réponse</span>Transformer la variation d'impédance d'un capteur passif en une <b>tension exploitable</b> : montage potentiométrique, source de courant, pont de Wheatstone…</div></div>
+  <div class="fc" data-cat="Généralités"><div class="q"><b>Étendue de mesure</b> (EM) ?</div><div class="a"><span class="lead">Formule</span>Plage exploitable avant saturation :<span class="box">$EM = \dfrac{V_{sat}}{S}$</span>Grande sensibilité ⇒ petite étendue (compromis).</div></div>
 
-  <div class="fc" data-cat="Concepts"><div class="q">Définition de la <b>sensibilité</b> $S$ ?</div><div class="a"><span class="lead">Réponse</span>$S = \dfrac{d(\text{sortie})}{d(\text{mesurande})}$, par ex. $S=\dfrac{dV_{mes}}{dT}$.<br>C'est la <b>pente</b> de la caractéristique : de combien la sortie bouge par unité de mesurande.</div></div>
+  <div class="fc" data-cat="Généralités"><div class="q"><b>Résolution / mobilité</b> d'une chaîne à $N$ digits ?</div><div class="a"><span class="lead">Formule</span>Pleine échelle découpée en $10^N$ points :<span class="box">$\text{mobilité} = \dfrac{EM}{10^{N}}$</span></div></div>
 
-  <div class="fc" data-cat="Concepts"><div class="q">Mesurande $m$ vs grandeur d'influence $g$ ?</div><div class="a"><span class="lead">Réponse</span>$m$ = ce qu'on veut mesurer. $g$ = grandeur <b>parasite</b> qui agit aussi sur le capteur (ex : la température sur une jauge de contrainte). On cherche à <b>rejeter</b> $g$.</div></div>
+  <div class="fc" data-cat="Généralités"><div class="q">Capteur <b>passif</b> vs <b>actif</b> ?</div><div class="a"><span class="lead">Définition</span><b>Passif</b> : sortie = impédance ($R$, $L$, $C$) variable → besoin d'un conditionneur (Pt100, jauge, capa). <b>Actif</b> : génère directement tension/courant (thermocouple, piézo).</div></div>
 
-  <div class="fc" data-cat="Concepts"><div class="q">Étendue de mesure (<b>EM</b>) ?</div><div class="a"><span class="lead">Réponse</span>Plage de mesurande exploitable avant saturation :<span class="box">$EM = \dfrac{V_{sat}}{S}$</span>Plus $S$ est grand, plus l'EM est petite (compromis sensibilité ↔ plage).</div></div>
+  <div class="fc" data-cat="Généralités"><div class="q">Mesurande $m$ vs grandeur d'influence $g$ ?</div><div class="a"><span class="lead">Définition</span>$m$ = ce qu'on veut mesurer. $g$ = grandeur <b>parasite</b> (température, humidité…) agissant aussi sur le capteur. Objectif : <b>rejeter</b> $g$.</div></div>
 
-  <div class="fc" data-cat="Concepts"><div class="q">Erreur de <b>mobilité</b> (résolution) d'une chaîne à $N$ digits ?</div><div class="a"><span class="lead">Réponse</span>La pleine échelle est découpée en $10^N$ points.<span class="box">$\text{mobilité} = \dfrac{EM}{10^{N}}$</span>Ex : 4 digits → $10^4$ points → mobilité $= EM/10000$.</div></div>
+  <!-- ===== AMPLI OP ===== -->
+  <div class="fc" data-cat="Ampli op"><div class="q">Les <b>2 règles</b> de l'AOP idéal en contre-réaction ?</div><div class="a"><span class="lead">Règles</span><b>(1)</b> $V_+ = V_-$ (l'AOP égalise ses entrées).<br><b>(2)</b> $i_+ = i_- = 0$ (impédance d'entrée infinie).</div></div>
 
-  <div class="fc" data-cat="Concepts"><div class="q">Les <b>2 règles</b> de l'AOP idéal en contre-réaction ?</div><div class="a"><span class="lead">Réponse</span><b>(1)</b> $V_+ = V_-$ (l'AOP égalise ses entrées).<br><b>(2)</b> $i_+ = i_- = 0$ (impédance d'entrée infinie : aucun courant n'entre).</div></div>
+  <div class="fc" data-cat="Ampli op"><div class="q">Qu'est-ce qu'une <b>masse virtuelle</b> ?</div><div class="a"><span class="lead">Définition</span>Quand $V_+$ est à la masse, la contre-réaction force $V_- = 0$ sans liaison physique à la masse. On l'utilise pour écrire la loi des nœuds à l'entrée $-$.</div></div>
 
-  <div class="fc" data-cat="Concepts"><div class="q">Qu'est-ce qu'une <b>masse virtuelle</b> ?</div><div class="a"><span class="lead">Réponse</span>Quand $V_+$ est à la masse ($0\,\text{V}$), la contre-réaction force $V_- = 0$ <i>sans</i> que ce nœud soit relié physiquement à la masse. On s'en sert pour écrire la loi des nœuds.</div></div>
+  <div class="fc" data-cat="Ampli op"><div class="q">Gain d'un montage <b>inverseur</b> ?</div><div class="a"><span class="lead">Formule</span><span class="box">$V_s = -\dfrac{R_f}{R_e}\,V_e$</span></div></div>
 
-  <div class="fc" data-cat="Concepts"><div class="q">Gain d'un AOP <b>inverseur</b> et <b>non-inverseur</b> ?</div><div class="a"><span class="lead">Réponse</span>Inverseur : $V_s = -\dfrac{R_f}{R_e}\,V_e$.<br>Non-inverseur : $V_s = \left(1+\dfrac{R_f}{R_e}\right)V_e$.</div></div>
+  <div class="fc" data-cat="Ampli op"><div class="q">Gain d'un montage <b>non-inverseur</b> ?</div><div class="a"><span class="lead">Formule</span><span class="box">$V_s = \left(1+\dfrac{R_f}{R_e}\right)V_e$</span></div></div>
+
+  <div class="fc" data-cat="Ampli op"><div class="q">Sortie d'un <b>sommateur inverseur</b> ?</div><div class="a"><span class="lead">Formule</span><span class="box">$V_s = -R_f\left(\dfrac{V_1}{R_1}+\dfrac{V_2}{R_2}+\dots\right)$</span>Chaque entrée pondérée par $R_f/R_k$, le tout inversé.</div></div>
+
+  <div class="fc" data-cat="Ampli op"><div class="q">Sortie d'un <b>ampli d'instrumentation</b> ?</div><div class="a"><span class="lead">Formule</span><span class="box">$V_{mes} = G\,(e^+ - e^-)$</span>$G$ = gain réglable, impédances d'entrée infinies (aucun courant prélevé).</div></div>
 
   <!-- ===== MILLMAN ===== -->
-  <div class="fc" data-cat="Millman"><div class="q">Théorème de <b>Millman</b> — à quoi sert-il ?</div><div class="a"><span class="lead">Réponse</span>À calculer le <b>potentiel d'un nœud</b> relié à plusieurs branches (sources + résistances) en <b>une seule formule</b>, sans écrire toutes les mailles.</div></div>
+  <div class="fc" data-cat="Millman"><div class="q">À quoi sert le théorème de <b>Millman</b> ?</div><div class="a"><span class="lead">Définition</span>Calculer le <b>potentiel d'un nœud</b> relié à plusieurs branches (sources + résistances) en une seule formule, sans écrire toutes les mailles.</div></div>
 
-  <div class="fc" data-cat="Millman"><div class="q">Formule de <b>Millman</b> ?</div><div class="a"><span class="lead">Réponse</span><span class="box">$V = \dfrac{\sum_k V_k/R_k}{\sum_k 1/R_k}$</span>Numérateur = somme des (tension de branche ÷ sa résistance). Dénominateur = somme des <b>conductances</b>. Une branche vers la masse ($V_k=0$) compte au dénominateur mais pas au numérateur.</div></div>
+  <div class="fc" data-cat="Millman"><div class="q">Formule de <b>Millman</b> ?</div><div class="a"><span class="lead">Formule</span><span class="box">$V = \dfrac{\sum_k V_k/R_k}{\sum_k 1/R_k}$</span>Numérateur = somme des (tension de branche ÷ résistance). Dénominateur = somme des conductances. Une branche à la masse ($V_k=0$) compte au dénominateur seulement.</div></div>
 
-  <div class="fc" data-cat="Millman"><div class="q">Millman appliqué à l'entrée $-$ d'un AOP (masse virtuelle) ?</div><div class="a"><span class="lead">Réponse</span>$V_-=0$ → le numérateur de Millman est nul :<span class="box">$\sum_k \dfrac{V_k}{R_k} = 0$</span>C'est exactement la <b>loi des nœuds</b>. Pour un sommateur : $\dfrac{V_{e1}}{R_1}+\dfrac{V_{e2}}{R_2}+\dfrac{V_s}{R_f}=0$.</div></div>
+  <div class="fc" data-cat="Millman"><div class="q">Millman appliqué à l'entrée $-$ d'un AOP ?</div><div class="a"><span class="lead">Méthode</span>$V_-=0$ (masse virtuelle) → le numérateur est nul :<span class="box">$\sum_k \dfrac{V_k}{R_k} = 0$</span>C'est exactement la <b>loi des nœuds</b>.</div></div>
 
-  <div class="fc" data-cat="Millman"><div class="q">Sommateur inverseur (résultat via Millman) ?</div><div class="a"><span class="lead">Réponse</span><span class="box">$V_s = -R_f\left(\dfrac{V_{e1}}{R_1}+\dfrac{V_{e2}}{R_2}+\dots\right)$</span>Chaque entrée pondérée par $R_f/R_k$, le tout <b>inversé</b>.</div></div>
+  <!-- ===== PONT DE WHEATSTONE ===== -->
+  <div class="fc" data-cat="Pont"><div class="q"><b>Diviseur de tension</b> (brique de base du pont) ?</div><div class="a"><span class="lead">Formule</span>Pour $Z_1$ (haut) et $Z_2$ (bas), tension au point milieu :<span class="box">$V_A = V_g\,\dfrac{Z_2}{Z_1+Z_2}$</span></div></div>
 
-  <!-- ===== TD2 ===== -->
-  <div class="fc" data-cat="TD2"><div class="q">Loi de la <b>Pt100</b> ?</div><div class="a"><span class="lead">TD2</span><span class="box">$R_C(T) = R_0(1+\alpha T)$</span>$R_0 = 100\,\Omega$ (à 0 °C), $\alpha = 3{,}85\cdot10^{-3}\,°C^{-1}$. La résistance augmente avec $T$.</div></div>
+  <div class="fc" data-cat="Pont"><div class="q">Tension de sortie d'un <b>pont de Wheatstone</b> ?</div><div class="a"><span class="lead">Formule</span><span class="box">$V_M = V_g\!\left(\dfrac{Z_2}{Z_1+Z_2} - \dfrac{Z_4}{Z_3+Z_4}\right)$</span>= différence de deux diviseurs de tension.</div></div>
 
-  <div class="fc" data-cat="TD2"><div class="q">Pourquoi alimenter la Pt100 par une <b>source de courant</b> constante $I$ ?</div><div class="a"><span class="lead">TD2</span>Loi d'Ohm $U=R\cdot I$ : si $I$ est fixe, la tension aux bornes est l'<b>image directe</b> de $R$, donc de $T$. On s'affranchit des variations de la tension d'alimentation.</div></div>
+  <div class="fc" data-cat="Pont"><div class="q">Condition d'<b>équilibre</b> du pont ($V_M=0$) ?</div><div class="a"><span class="lead">Formule</span><span class="box">$Z_1\,Z_4 = Z_2\,Z_3$</span>Produits des branches croisées égaux.</div></div>
 
-  <div class="fc" data-cat="TD2"><div class="q">Sortie d'un <b>amplificateur d'instrumentation</b> ?</div><div class="a"><span class="lead">TD2</span><span class="box">$V_{mes} = G\,(e^+ - e^-)$</span>$G$ = gain réglable, impédances d'entrée infinies (aucun courant prélevé sur les entrées).</div></div>
+  <div class="fc" data-cat="Pont"><div class="q">Formule <b>linéarisée</b> du pont (petites variations, $Z_3=Z_4=R$) ?</div><div class="a"><span class="lead">Formule</span><span class="box">$V_M \approx V_g\,\dfrac{\Delta Z_{c2}-\Delta Z_{c1}}{4\,Z_{c0}}$</span></div></div>
 
-  <div class="fc" data-cat="TD2"><div class="q">Sensibilité d'une Pt100 (courant $I$, gain $G$) ?</div><div class="a"><span class="lead">TD2</span>$V_{mes}=G\,I\,R_0(1+\alpha T)$, donc :<span class="box">$S_{mes} = \dfrac{dV_{mes}}{dT} = G\,I\,R_0\,\alpha$</span></div></div>
+  <div class="fc" data-cat="Pont"><div class="q">Le <b>mécanisme clé</b> du pont ?</div><div class="a"><span class="lead">Principe</span>Il mesure une <b>différence</b> $\Delta Z_{c2}-\Delta Z_{c1}$ :<br>• terme <b>commun</b> aux 2 capteurs → <b>s'annule</b><br>• terme <b>opposé</b> → <b>se double</b></div></div>
 
-  <div class="fc" data-cat="TD2"><div class="q">Réglage de $G$ pour $S_{mes}=0{,}1$ V/°C ($I=5$ mA) ?</div><div class="a"><span class="lead">TD2</span>$G = \dfrac{S_{mes}}{I\,R_0\,\alpha} = \dfrac{0{,}1}{5\cdot10^{-3}\times100\times3{,}85\cdot10^{-3}} \approx 52$</div></div>
+  <div class="fc" data-cat="Pont"><div class="q">Qu'est-ce qu'un montage <b>push-pull</b> ?</div><div class="a"><span class="lead">Principe</span>Deux capteurs variant en <b>sens opposé</b> ($\Delta Z_{c1}=-S\Delta m$, $\Delta Z_{c2}=+S\Delta m$). Effet : <b>sensibilité ×2</b>.</div></div>
 
-  <div class="fc" data-cat="TD2"><div class="q">Résistance d'un <b>fil de liaison</b> ?</div><div class="a"><span class="lead">TD2</span><span class="box">$r = \dfrac{\rho\,l}{S}, \quad S=\pi\left(\dfrac{d}{2}\right)^2$</span>Cuivre : $\rho = 1{,}72\cdot10^{-8}\,\Omega\cdot m$.</div></div>
+  <div class="fc" data-cat="Pont"><div class="q">Que <b>rejette</b> le push-pull (et pourquoi) ?</div><div class="a"><span class="lead">Principe</span>Tout terme <b>commun</b> aux 2 capteurs : la <b>grandeur d'influence</b> ($+S_g\Delta g$ sur les deux) et la <b>non-linéarité</b> $\beta(\Delta m)^2$ (le carré tue le signe $-$). Annulés par la différence du pont.</div></div>
 
-  <div class="fc" data-cat="TD2"><div class="q">Montage <b>2 fils réel</b> : quelle erreur ?</div><div class="a"><span class="lead">TD2</span>Le courant traverse 2 fils → on mesure $R_C+2r$.<br>Erreur de tension $\delta V = G\,I\,(2r)$.<span class="box">$\delta T = \dfrac{2r}{R_0\,\alpha}$</span></div></div>
+  <!-- ===== RÉSISTIF / THERMOMÉTRIE ===== -->
+  <div class="fc" data-cat="Résistif"><div class="q">Loi d'une <b>résistance thermométrique</b> (Pt100) ?</div><div class="a"><span class="lead">Formule</span><span class="box">$R(T) = R_0\,(1+\alpha T)$</span>$R_0$ = résistance à 0 °C, $\alpha$ = coefficient de température.</div></div>
 
-  <div class="fc" data-cat="TD2"><div class="q">Pourquoi le montage <b>4 fils</b> annule l'erreur des fils ?</div><div class="a"><span class="lead">TD2</span>2 fils amènent le courant, 2 autres mesurent la tension. Ces derniers vont sur des entrées d'<b>impédance infinie</b> → aucun courant → pas de chute ($U=r\cdot0=0$). Donc $V_{mes}=G\,I\,R_C$, indépendant de $r$.</div></div>
+  <div class="fc" data-cat="Résistif"><div class="q">Variation $\Delta R$ pour une variation $\Delta T$ ?</div><div class="a"><span class="lead">Formule</span><span class="box">$\Delta R = R_0\,\alpha\,\Delta T$</span></div></div>
 
-  <!-- ===== TD3 ===== -->
-  <div class="fc" data-cat="TD3"><div class="q">Tension de sortie d'un <b>pont</b> (4 impédances) ?</div><div class="a"><span class="lead">TD3</span><span class="box">$V_M = V_g\!\left(\dfrac{Z_2}{Z_1+Z_2} - \dfrac{Z_4}{Z_3+Z_4}\right)$</span>= différence de deux diviseurs de tension.</div></div>
+  <div class="fc" data-cat="Résistif"><div class="q">Résistance d'un <b>fil</b> de liaison ?</div><div class="a"><span class="lead">Formule</span><span class="box">$r = \dfrac{\rho\,l}{S}, \quad S = \pi\!\left(\dfrac{d}{2}\right)^2$</span>$\rho$ = résistivité, $l$ = longueur, $S$ = section.</div></div>
 
-  <div class="fc" data-cat="TD3"><div class="q">Condition d'<b>équilibre</b> du pont ($V_M=0$) ?</div><div class="a"><span class="lead">TD3</span><span class="box">$Z_1\,Z_4 = Z_2\,Z_3$</span>Produits des branches croisées égaux.</div></div>
+  <div class="fc" data-cat="Résistif"><div class="q">Pourquoi alimenter par une <b>source de courant</b> constante ?</div><div class="a"><span class="lead">Principe</span>$U = R\cdot I$ : si $I$ est fixe, la tension est l'<b>image directe</b> de $R$ (donc du mesurande). Insensible à la tension d'alimentation.</div></div>
 
-  <div class="fc" data-cat="TD3"><div class="q">Formule <b>linéarisée</b> du pont (petites variations, $Z_3=Z_4=R$) ?</div><div class="a"><span class="lead">TD3</span><span class="box">$V_M \approx V_g\,\dfrac{\Delta Z_{c2}-\Delta Z_{c1}}{4\,Z_{c0}}$</span></div></div>
+  <div class="fc" data-cat="Résistif"><div class="q">Principe du montage <b>4 fils</b> ?</div><div class="a"><span class="lead">Principe</span>2 fils amènent le courant, 2 fils mesurent la tension. Ces derniers vont sur des entrées d'<b>impédance infinie</b> → aucun courant → pas de chute ($U=r\cdot0=0$). La résistance des fils n'intervient plus.</div></div>
 
-  <div class="fc" data-cat="TD3"><div class="q">LE mécanisme clé du pont ?</div><div class="a"><span class="lead">TD3</span>Il mesure une <b>différence</b> $\Delta Z_{c2}-\Delta Z_{c1}$. Donc :<br>• tout terme <b>commun</b> aux 2 capteurs → <b>s'annule</b><br>• tout terme <b>opposé</b> → <b>se double</b></div></div>
+  <!-- ===== THERMIQUE ===== -->
+  <div class="fc" data-cat="Thermique"><div class="q">Nombre de <b>Rayleigh</b> (convection naturelle) ?</div><div class="a"><span class="lead">Formule</span><span class="box">$Ra = \dfrac{\rho^2\,\Gamma\,\beta\,C_p}{\mu\,\lambda}\,\Delta T\,l_m^3$</span>$\Gamma$ = accélération, $\beta$ = dilatation, $C_p$ = chaleur massique, $\mu$ = viscosité, $\lambda$ = conductivité.</div></div>
 
-  <div class="fc" data-cat="TD3"><div class="q">Qu'est-ce qu'un montage <b>push-pull</b> ?</div><div class="a"><span class="lead">TD3</span>Deux capteurs qui varient en <b>sens opposé</b> : $\Delta Z_{c1}=-S\Delta m$, $\Delta Z_{c2}=+S\Delta m$. Résultat : <b>sensibilité ×2</b>.</div></div>
+  <div class="fc" data-cat="Thermique"><div class="q">De quoi dépend la sensibilité d'un <b>accéléromètre thermique</b> ?</div><div class="a"><span class="lead">Principe</span>Convection d'un gaz chauffé → écart de température entre 2 détecteurs.<span class="box">$S \propto (\Delta T)^2 \cdot \dfrac{1}{\lambda}$</span>Chauffer fort et choisir un gaz peu conducteur augmente la sensibilité.</div></div>
 
-  <div class="fc" data-cat="TD3"><div class="q">Pourquoi le push-pull <b>rejette une grandeur d'influence</b> ?</div><div class="a"><span class="lead">TD3</span>Si $g$ agit identiquement sur les 2 capteurs ($+S_g\Delta g$ sur les deux), ce terme est <b>commun</b> → annulé par la différence du pont.</div></div>
+  <!-- ===== CAPACITIF ===== -->
+  <div class="fc" data-cat="Capacitif"><div class="q">Capacité d'un <b>condensateur plan</b> ?</div><div class="a"><span class="lead">Formule</span><span class="box">$C = \dfrac{\varepsilon\,S}{e}$</span>$\varepsilon$ = permittivité du diélectrique, $S$ = surface, $e$ = écartement.</div></div>
 
-  <div class="fc" data-cat="TD3"><div class="q">Pourquoi le push-pull <b>supprime la non-linéarité</b> $\beta(\Delta m)^2$ ?</div><div class="a"><span class="lead">TD3</span>Le carré tue le signe $-$ → $\beta(\Delta m)^2$ est <b>identique</b> sur les 2 capteurs → commun → annulé. Il ne reste que $2\alpha\Delta m$ (linéaire) → sensibilité doublée.</div></div>
+  <div class="fc" data-cat="Capacitif"><div class="q">Association de condensateurs (série / parallèle) ?</div><div class="a"><span class="lead">Formule</span>Parallèle : $C_{//} = C_1 + C_2$.<br>Série : $\dfrac{1}{C_{s}} = \dfrac{1}{C_1} + \dfrac{1}{C_2}$.<br>(Inverse des résistances.)</div></div>
 
-  <div class="fc" data-cat="TD3"><div class="q">D'où vient la <b>non-linéarité résiduelle</b> du pont à 1 capteur ?</div><div class="a"><span class="lead">TD3</span>Du dénominateur $2Z_{c0}+\Delta Z_{c1}+\Delta Z_{c2}$. Avec $\frac{1}{1+x}\approx1-x$, le terme $\frac{\Delta Z_{c1}+\Delta Z_{c2}}{2Z_{c0}}$ déforme. En push-pull cette somme $=0$ → linéaire <b>exact</b>.</div></div>
+  <div class="fc" data-cat="Capacitif"><div class="q"><b>Impédance</b> d'un condensateur en sinusoïdal ?</div><div class="a"><span class="lead">Formule</span><span class="box">$\underline{Z} = \dfrac{1}{jC\omega}, \quad |Z| = \dfrac{1}{2\pi f C}$</span>Grande capacité → faible impédance.</div></div>
 
-  <!-- ===== TD4 ===== -->
-  <div class="fc" data-cat="TD4"><div class="q">Principe de l'<b>accéléromètre thermique</b> ?</div><div class="a"><span class="lead">TD4</span>Une résistance chauffe un gaz au centre d'une cavité ; 2 détecteurs symétriques. Sous accélération, la <b>convection</b> déplace le gaz chaud → profil asymétrique → écart de température = image de l'accélération. Aucune masse mobile.</div></div>
+  <div class="fc" data-cat="Capacitif"><div class="q"><b>Diviseur capacitif</b> : comment se partage la tension ?</div><div class="a"><span class="lead">Formule</span>À l'<b>inverse</b> des capacités (contraire des résistances) :<span class="box">$V_{C_2} = V_g\,\dfrac{C_1}{C_1+C_2}$</span>La plus petite $C$ prend le plus de tension.</div></div>
 
-  <div class="fc" data-cat="TD4"><div class="q">Les <b>3 « delta T »</b> à ne pas confondre ?</div><div class="a"><span class="lead">TD4</span>$\Delta T$ = hauteur du gradient (la bosse de chaleur).<br>$\delta T_{det}$ = écart <b>total</b> entre les 2 détecteurs (info utile).<br>$\Delta T_d$ = variation d'<b>un seul</b> détecteur.</div></div>
+  <div class="fc" data-cat="Capacitif"><div class="q">Forme de la capacité d'un <b>capteur de niveau</b> ?</div><div class="a"><span class="lead">Formule</span>Deux capas en parallèle (immergée + air) :<span class="box">$C(x) = C_0(1+Kx), \quad K = \dfrac{\varepsilon_2-\varepsilon_1}{\varepsilon_1\,h}$</span></div></div>
 
-  <div class="fc" data-cat="TD4"><div class="q">Relations de l'accéléromètre + nombre de <b>Rayleigh</b> ?</div><div class="a"><span class="lead">TD4</span>$\delta T_{det} = \Delta T\cdot Ra\cdot K$ avec $Ra = \dfrac{\rho^2\,\Gamma\,\beta\,C_p}{\mu\,\lambda}\,\Delta T\,l_m^3$.<span class="box">$\Rightarrow\ \delta T_{det} \propto (\Delta T)^2\cdot\Gamma$</span>($\Gamma$ = accélération subie.)</div></div>
-
-  <div class="fc" data-cat="TD4"><div class="q">De quoi dépend la <b>sensibilité</b> de l'accéléromètre ?</div><div class="a"><span class="lead">TD4</span>$S=\dfrac{\delta T_{det}}{\Gamma}\propto \dfrac{\rho^2\beta C_p\,l_m^3}{\mu\,\lambda}(\Delta T)^2$. À retenir : $S\propto(\Delta T)^2$ et $S\propto \dfrac{1}{\lambda}$ (un gaz peu conducteur est meilleur).</div></div>
-
-  <div class="fc" data-cat="TD4"><div class="q">Comment <b>vérifier la loi</b> avec 2 points de mesure ?</div><div class="a"><span class="lead">TD4</span>On teste les rapports :<br>• si $S\propto(\Delta T)^2$ : $\dfrac{S_2}{S_1}=\left(\dfrac{\Delta T_2}{\Delta T_1}\right)^2$<br>• si $S\propto1/\lambda$ : $\dfrac{S_2}{S_1}=\dfrac{\lambda_1}{\lambda_2}$<br>Si les rapports collent → loi validée.</div></div>
-
-  <div class="fc" data-cat="TD4"><div class="q">Lien $\delta T_{det} \leftrightarrow \Delta T_d$ et $\Delta R$ ?</div><div class="a"><span class="lead">TD4</span>Push-pull : un détecteur $+\Delta T_d$, l'autre $-\Delta T_d$ → écart double :<span class="box">$\delta T_{det}=2\,\Delta T_d \quad;\quad \Delta R = R_0\,\alpha\,\Delta T_d$</span></div></div>
-
-  <div class="fc" data-cat="TD4"><div class="q">Sortie du <b>pont push-pull</b> ($R_1=R_n-\Delta R$, $R_2=R_n+\Delta R$, $R_3=R_4=R_n$) ?</div><div class="a"><span class="lead">TD4</span><span class="box">$V_m = \dfrac{E_s\,\Delta R}{2R_n}$</span>Linéaire <b>exact</b> en $\Delta R$ (avantage du push-pull).</div></div>
-
-  <div class="fc" data-cat="TD4"><div class="q">La <b>chaîne de mesure complète</b> de l'accéléromètre ?</div><div class="a"><span class="lead">TD4</span>$\Gamma \to \delta T_{det}(=S\Gamma) \to \Delta T_d(=\frac{\delta T_{det}}{2}) \to \Delta R(=R_0\alpha\Delta T_d) \to V_m(=\frac{E_s\Delta R}{2R_n})$<span class="box">$V_m = \dfrac{E_s\,\alpha\,S}{4}\,\Gamma$ (si $R_0=R_n$)</span></div></div>
-
-  <!-- ===== TD5 ===== -->
-  <div class="fc" data-cat="TD5"><div class="q">Capacité $C_0$ d'un condensateur plan quand la cuve est <b>vide</b> ?</div><div class="a"><span class="lead">TD5 · Q1</span>Condensateur plan, diélectrique = air ($\varepsilon_1$) :<span class="box">$C_0 = \dfrac{\varepsilon_1\,S}{e}$</span>$S$ = surface des armatures, $e$ = écartement.</div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Pourquoi $C(x)=C_0(1+Kx)$ pour le capteur de niveau ?</div><div class="a"><span class="lead">TD5 · Q2</span>L'huile à hauteur $x$ découpe le condensateur en <b>deux capas en parallèle</b> : partie immergée (huile $\varepsilon_2$, surface $\frac{x}{h}S$) + partie air ($\varepsilon_1$, surface $\frac{h-x}{h}S$). Leur somme donne :<span class="box">$C(x)=\dfrac{\varepsilon_1 S}{e}\!\left[1+\dfrac{\varepsilon_2-\varepsilon_1}{\varepsilon_1}\dfrac{x}{h}\right]$</span></div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Valeur de $K$ dans $C(x)=C_0(1+Kx)$ ?</div><div class="a"><span class="lead">TD5 · Q2</span><span class="box">$K=\dfrac{\varepsilon_2-\varepsilon_1}{\varepsilon_1\,h}$</span>C'est la sensibilité du capteur (en $m^{-1}$). AN : $K = 3\ m^{-1}$.</div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Capacités <b>min</b> et <b>max</b> du capteur ?</div><div class="a"><span class="lead">TD5 · Q2</span>$C_{min}=C_0=\frac{\varepsilon_1 S}{e}$ (vide), $C_{max}=C(h)=\frac{\varepsilon_2 S}{e}=C_0(1+Kh)$.<br>Comme $Kh=\frac{\varepsilon_2-\varepsilon_1}{\varepsilon_1}=3$ → $C_{max}=4C_0$.<span class="box">$C_{min}\approx 35{,}4\text{ pF},\quad C_{max}\approx 142\text{ pF}$</span></div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Impédance d'un condensateur en sinusoïdal ?</div><div class="a"><span class="lead">TD5</span>$\underline{Z}=\dfrac{1}{jC\omega}$, module $|Z|=\dfrac{1}{2\pi f C}$. Grande $C$ → petite impédance.<span class="box">à 10 kHz : $Z_{max}\approx 450\text{ k}\Omega$ (vide), $Z_{min}\approx 112\text{ k}\Omega$ (plein)</span></div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Comment se partage la tension entre 2 condensateurs en série ?</div><div class="a"><span class="lead">TD5</span>À l'<b>inverse</b> des capacités (contraire des résistances) : la plus petite $C$ prend le plus de tension.<span class="box">$V_{C_2}=V_g\,\dfrac{C_1}{C_1+C_2}$</span></div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">$V_{mes}$ du <b>pont capacitif</b> ($C(x)$ &amp; $C_v$ à gauche, $R$ &amp; $R$ à droite) ?</div><div class="a"><span class="lead">TD5 · Q3</span>Diviseur capacitif : $V_A=V_g\dfrac{C(x)}{C(x)+C_v}$, et $V_B=\dfrac{V_g}{2}$. Avec $C_v=C_0$ :<span class="box">$V_{mes}=V_g\!\left(\dfrac{C(x)}{C(x)+C_0}-\dfrac12\right)$</span></div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">$V_{mes}$ en fonction de $x$, $K$, $V_g$ ?</div><div class="a"><span class="lead">TD5 · Q3</span>En injectant $C(x)=C_0(1+Kx)$ :<span class="box">$V_{mes}=\dfrac{V_g\,Kx}{2\,(2+Kx)}$</span><b>Non-linéaire</b> ($Kx$ au dénominateur) : part de 0, croît puis sature. AN : $V_{mes}(h)=3$ V pour $V_g=10$ V.</div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Pourquoi la <b>forme des armatures</b> (plan, coaxial, tige+paroi) ne change rien ?</div><div class="a"><span class="lead">TD5 · Q4</span>Avec $C_l$ = capacité par unité de longueur (cuve vide) : $C(x)=C_l(h-x)+C_l\frac{\varepsilon_2}{\varepsilon_1}x = C_0(1+Kx)$, <b>même forme</b>. Seul compte le niveau $x$, pas la section.</div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Quel <b>problème majeur</b> peut fausser la mesure ?</div><div class="a"><span class="lead">TD5 · Q5</span>La permittivité $\varepsilon_2$ du liquide varie avec la <b>température</b> et la <b>composition</b> — surtout la présence d'<b>eau</b> ($\varepsilon\approx80$, conductrice). Cela change $K$ → erreur de niveau. C'est la grandeur d'influence principale.</div></div>
-
-  <!-- ===== TD6 ===== -->
-  <div class="fc" data-cat="TD6"><div class="q">Pourquoi un pont alimenté en <b>tension fixe</b> est non-linéaire ?</div><div class="a"><span class="lead">TD6</span><span class="box">$V_A = \dfrac{E\,\Delta R}{2R_0+\Delta R}$</span>Le $\Delta R$ au <b>dénominateur</b> rend la réponse non proportionnelle à $\Delta R$.</div></div>
-
-  <div class="fc" data-cat="TD6"><div class="q">Principe de la <b>linéarisation par contre-réaction</b> ?</div><div class="a"><span class="lead">TD6</span>On rend la tension d'alimentation $E$ du pont <b>dépendante de la sortie</b> $V_s$. En bouclant correctement, le $\Delta R$ du dénominateur est compensé → réponse linéaire.</div></div>
-
-  <div class="fc" data-cat="TD6"><div class="q">Expression de $E$ (sommateur inverseur : $R_5$ sur $V_s$, $R_6$ pour $V_{ref}$ et la réaction) ?</div><div class="a"><span class="lead">TD6 · I-2</span>Masse virtuelle $V_-=0$ → loi des nœuds :<br>$\dfrac{V_s}{R_5}+\dfrac{V_{ref}}{R_6}+\dfrac{E}{R_6}=0$<span class="box">$E = -\dfrac{R_6}{R_5}\,V_s - V_{ref}$</span></div></div>
-
-  <div class="fc" data-cat="TD6"><div class="q">Condition de <b>linéarité</b> du montage (I-4) ?</div><div class="a"><span class="lead">TD6 · I-4</span><span class="box">$\dfrac{R_6}{R_5} = \dfrac{R}{R+2R_f}$</span>Alors le $\Delta R$ disparaît du dénominateur et $V_s \propto \dfrac{\Delta R}{R}$ (linéaire).</div></div>
+  <div class="fc" data-cat="Capacitif"><div class="q">Grandeur d'influence d'un capteur capacitif ?</div><div class="a"><span class="lead">Principe</span>La <b>permittivité</b> du diélectrique varie avec la température et la composition (surtout l'<b>eau</b>, $\varepsilon\approx80$ et conductrice). Cela change $K$ → erreur.</div></div>
 
 </div>
 <!-- ============ FIN DONNÉES ============ -->
