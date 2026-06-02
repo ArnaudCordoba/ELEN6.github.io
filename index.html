@@ -183,6 +183,16 @@
 
   <div class="fc" data-cat="Généralités"><div class="q">Mesurande $m$ vs grandeur d'influence $g$ ?</div><div class="a"><span class="lead">Définition</span>$m$ = ce qu'on veut mesurer. $g$ = grandeur <b>parasite</b> (température, humidité…) agissant aussi sur le capteur. Objectif : <b>rejeter</b> $g$.</div></div>
 
+  <div class="fc" data-cat="Généralités"><div class="q">Quelle est la <b>chaîne de mesure</b> complète ?</div><div class="a"><span class="lead">Cours</span><span class="box">mesurande → capteur → conditionnement → valeur mesurée</span>Le capteur convertit la grandeur physique en signal électrique ; le conditionnement le met en forme (amplification, mise en tension, rejet des parasites).</div></div>
+
+  <div class="fc" data-cat="Généralités"><div class="q">Les <b>4 exigences</b> d'une bonne chaîne de mesure ?</div><div class="a"><span class="lead">Cours</span><b>(1)</b> amplifier le signal (souvent faible) → compatible mesure numérique ;<br><b>(2)</b> se ramener à une <b>tension</b> (seule grandeur exploitée) ;<br><b>(3)</b> ne pas perturber le phénomène (pas de modif. électrique/thermique) ;<br><b>(4)</b> rester significative en milieu perturbé (rejet des grandeurs d'influence).</div></div>
+
+  <div class="fc" data-cat="Généralités"><div class="q">Capteur <b>actif</b> : quelles grandeurs et quels effets ?</div><div class="a"><span class="lead">Cours</span>Fonctionne en <b>générateur</b> → produit $V$, $I$ ou $Q$ (charge). Effets :<br>• température → thermoélectricité (tension)<br>• flux lumineux → photoémission / pyroélectricité (courant, charge)<br>• force, pression, accélération → piézoélectricité (charge)<br>• position → effet Hall (tension)<br>• vitesse → induction (tension)</div></div>
+
+  <div class="fc" data-cat="Généralités"><div class="q">Capteur <b>passif</b> : sur quoi agit le mesurande ?</div><div class="a"><span class="lead">Cours</span>C'est une impédance ($R$, $L$, $C$) alimentée par une source externe. Le mesurande modifie : la <b>géométrie/dimensions</b> (position), ou les <b>propriétés du matériau</b> (résistivité, perméabilité, permittivité), ou les deux.<span class="box">$R=\rho\dfrac{l}{S}, \quad C=\varepsilon\dfrac{S}{e}$</span></div></div>
+
+  <div class="fc" data-cat="Généralités"><div class="q">Les <b>2 types de conditionneurs</b> d'un capteur passif ?</div><div class="a"><span class="lead">Cours</span>Selon où l'information est transférée :<br>• sur l'<b>amplitude</b> $v_m=f(Z)$ → montages potentiométriques, 4 fils, ponts, AOP, AI<br>• sur la <b>fréquence</b> $f_m=f(Z)$ → oscillateurs, multivibrateurs</div></div>
+
   <!-- ===== AMPLI OP ===== -->
   <div class="fc" data-cat="Ampli op"><div class="q">Les <b>2 règles</b> de l'AOP idéal en contre-réaction ?</div><div class="a"><span class="lead">Règles</span><b>(1)</b> $V_+ = V_-$ (l'AOP égalise ses entrées).<br><b>(2)</b> $i_+ = i_- = 0$ (impédance d'entrée infinie).</div></div>
 
@@ -217,6 +227,18 @@
   <div class="fc" data-cat="Pont"><div class="q">Qu'est-ce qu'un montage <b>push-pull</b> ?</div><div class="a"><span class="lead">Principe</span>Deux capteurs variant en <b>sens opposé</b> ($\Delta Z_{c1}=-S\Delta m$, $\Delta Z_{c2}=+S\Delta m$). Effet : <b>sensibilité ×2</b>.</div></div>
 
   <div class="fc" data-cat="Pont"><div class="q">Que <b>rejette</b> le push-pull (et pourquoi) ?</div><div class="a"><span class="lead">Principe</span>Tout terme <b>commun</b> aux 2 capteurs : la <b>grandeur d'influence</b> ($+S_g\Delta g$ sur les deux) et la <b>non-linéarité</b> $\beta(\Delta m)^2$ (le carré tue le signe $-$). Annulés par la différence du pont.</div></div>
+
+  <div class="fc" data-cat="Pont"><div class="q">Pourquoi utiliser un montage <b>en pont</b> ?</div><div class="a"><span class="lead">Cours</span>La mesure est de nature <b>différentielle</b> → moins sensible aux <b>bruits</b> et aux <b>dérives</b> de la source. Au repos le pont est équilibré ($V_m=0$) : on ne mesure que la variation.</div></div>
+
+  <div class="fc" data-cat="Pont"><div class="q">Pont de Wheatstone alimenté en <b>tension</b> $e_s$ : $V_m$ ?</div><div class="a"><span class="lead">Formule (source tension)</span><span class="box">$V_m = e_s\,\dfrac{R_c R_3 - R_1 R_4}{(R_1+R_c)(R_3+R_4)}$</span>Équilibré ($V_m=0$) si $R_c R_3 = R_1 R_4$.</div></div>
+
+  <div class="fc" data-cat="Pont"><div class="q">Pont en <b>tension</b>, seul $R_c=R_0+\Delta R_c$ varie (autres $=R_0$) : $\Delta V_m$ ?</div><div class="a"><span class="lead">Formule (source tension)</span><span class="box">$\Delta V_m = \dfrac{e_s}{4}\cdot\dfrac{\Delta R_c/R_0}{1+\dfrac{\Delta R_c}{2R_0}}$</span>Le terme $\dfrac{\Delta R_c}{2R_0}$ au dénominateur = <b>non-linéarité</b>.</div></div>
+
+  <div class="fc" data-cat="Pont"><div class="q">Pont alimenté en <b>courant</b> $i_s$, seul $R_c$ varie : $\Delta V_m$ ?</div><div class="a"><span class="lead">Formule (source courant)</span><span class="box">$\Delta V_m = \dfrac{i_s\,\Delta R_c}{4}\cdot\dfrac{1}{1+\dfrac{\Delta R_c}{4R_0}}$</span>Terme non-linéaire en $/4R_0$ (au lieu de $/2R_0$) → la <b>source de courant réduit la non-linéarité</b> du pont.</div></div>
+
+  <div class="fc" data-cat="Pont"><div class="q">Faibles variations ($\Delta R_c \ll R_0$, jauges) : sensibilité tension vs courant ?</div><div class="a"><span class="lead">Formule</span>Alim. <b>tension</b> : $\Delta V_m\approx\dfrac{e_s}{4}\dfrac{\Delta R_c}{R_0}$ → $S=\dfrac{e_s}{4R_0}$.<br>Alim. <b>courant</b> : $\Delta V_m\approx\dfrac{i_s}{4}\Delta R_c$ → $S=\dfrac{i_s}{4}$.</div></div>
+
+  <div class="fc" data-cat="Pont"><div class="q">Quel danger en augmentant l'alimentation du pont (pour gagner en sensibilité) ?</div><div class="a"><span class="lead">Principe</span>L'<b>effet Joule</b> : plus d'alimentation = plus de sensibilité, mais le capteur s'échauffe ($P=RI^2$) → auto-échauffement qui fausse la mesure. Compromis à respecter.</div></div>
 
   <!-- ===== RÉSISTIF / THERMOMÉTRIE ===== -->
   <div class="fc" data-cat="Résistif"><div class="q">Loi d'une <b>résistance thermométrique</b> (Pt100) ?</div><div class="a"><span class="lead">Formule</span><span class="box">$R(T) = R_0\,(1+\alpha T)$</span>$R_0$ = résistance à 0 °C, $\alpha$ = coefficient de température.</div></div>
