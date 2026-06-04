@@ -2,376 +2,642 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Flashcards · Capteurs & Microsystèmes</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards ELEN6 — Amplificateur HF</title>
 <style>
-  :root{
-    --bg:#0b1622;
-    --bg2:#0f1d2e;
-    --panel:#13263b;
-    --panel2:#16304a;
-    --ink:#e8f1f8;
-    --muted:#7d97ac;
-    --cyan:#3fd0d8;
-    --green:#7ee0a8;
-    --blue:#5aa9ff;
-    --gold:#f0c674;
-    --line:rgba(120,160,190,.16);
-    --shadow:0 18px 50px -18px rgba(0,0,0,.7);
+  :root {
+    --bg: #FAF9F5;
+    --surface: #FFFFFF;
+    --text: #2C2C2A;
+    --text-muted: #6B6B68;
+    --border: #E5E3DB;
+    --shadow: rgba(0, 0, 0, 0.08);
+    --shadow-lg: rgba(0, 0, 0, 0.12);
+    --theorie: #1F4E79;
+    --theorie-light: #E8F0F8;
+    --manips: #C36A2E;
+    --manips-light: #FAEEDA;
+    --radius: 14px;
   }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;height:100%}
-  body{
-    background:
-      radial-gradient(1200px 700px at 80% -10%, rgba(63,208,216,.10), transparent 60%),
-      radial-gradient(900px 600px at -10% 110%, rgba(90,169,255,.10), transparent 55%),
-      var(--bg);
-    color:var(--ink);
-    font-family:"Newsreader",Georgia,serif;
-    display:flex;flex-direction:column;
-    min-height:100dvh;
-    overflow-x:hidden;
-  }
-  body::before{
-    content:"";position:fixed;inset:0;pointer-events:none;opacity:.035;mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  header{
-    padding:22px 18px 8px;
-    text-align:center;
-  }
-  .kicker{
-    font-family:"JetBrains Mono",monospace;
-    font-size:11px;letter-spacing:.32em;text-transform:uppercase;
-    color:var(--cyan);
-  }
-  h1{
-    font-family:"Fraunces",serif;font-weight:800;
-    font-size:clamp(26px,7vw,38px);line-height:1.02;
-    margin:.18em 0 .1em;letter-spacing:-.01em;
-  }
-  h1 em{font-style:italic;color:var(--gold);font-weight:400}
-  .sub{color:var(--muted);font-size:14px;font-style:italic}
 
-  .filters{
-    display:flex;gap:8px;overflow-x:auto;padding:14px 18px 6px;
-    scrollbar-width:none;-webkit-overflow-scrolling:touch;
-  }
-  .filters::-webkit-scrollbar{display:none}
-  .chip{
-    flex:0 0 auto;border:1px solid var(--line);background:var(--panel);
-    color:var(--muted);font-family:"JetBrains Mono",monospace;font-size:12px;
-    padding:8px 14px;border-radius:999px;cursor:pointer;transition:.18s;white-space:nowrap;
-  }
-  .chip:hover{color:var(--ink);border-color:rgba(120,160,190,.4)}
-  .chip.on{background:var(--cyan);color:#04202a;border-color:var(--cyan);font-weight:600}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  main{flex:1;display:flex;align-items:center;justify-content:center;padding:8px 16px 4px}
-  .stage{width:100%;max-width:560px;perspective:1600px}
+  html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
 
-  .card{
-    position:relative;width:100%;min-height:62dvh;
-    border-radius:22px;cursor:pointer;
-    transition:transform .12s ease;
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px 16px 24px;
   }
-  .card:active{transform:scale(.992)}
-  .face{
-    border-radius:22px;border:1px solid var(--line);
-    background:linear-gradient(160deg,var(--panel2),var(--panel));
-    box-shadow:var(--shadow);
-    padding:26px 24px;min-height:62dvh;
-    display:flex;flex-direction:column;
-    animation:rise .42s cubic-bezier(.2,.8,.2,1);
-  }
-  @keyframes rise{from{opacity:0;transform:translateY(14px) rotateX(6deg)}to{opacity:1;transform:none}}
-  .face::before{
-    content:"";position:absolute;left:24px;right:24px;top:0;height:3px;border-radius:0 0 4px 4px;
-    background:linear-gradient(90deg,var(--cyan),var(--blue),var(--green));opacity:.85;
-  }
-  .meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-  .tag{
-    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
-    color:#04202a;background:var(--cyan);padding:5px 11px;border-radius:6px;font-weight:600;
-  }
-  .side{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-  .side.ans{color:var(--green)}
-  .content{flex:1;display:flex;flex-direction:column;justify-content:center}
-  .q{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(20px,5.6vw,28px);line-height:1.28;letter-spacing:-.01em}
-  .a{font-size:clamp(16px,4.4vw,19px);line-height:1.55;color:#dde9f2}
-  .a .lead{display:block;color:var(--cyan);font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
-  .katex{font-size:1.02em}
-  .a .box{display:block;margin:14px 0;padding:12px 14px;border-left:3px solid var(--gold);background:rgba(240,198,116,.07);border-radius:0 8px 8px 0}
-  .hint{
-    text-align:center;color:var(--muted);font-style:italic;font-size:13px;margin-top:18px;
-    opacity:.9;transition:.2s;
-  }
-  .card.flipped .hint{opacity:0;height:0;margin:0}
 
-  .controls{
-    display:flex;align-items:center;justify-content:center;gap:14px;
-    padding:14px 16px calc(16px + env(safe-area-inset-bottom));
+  header {
+    text-align: center;
+    margin-bottom: 18px;
   }
-  .nav{
-    width:54px;height:54px;border-radius:50%;border:1px solid var(--line);
-    background:var(--panel);color:var(--ink);font-size:22px;cursor:pointer;
-    display:grid;place-items:center;transition:.18s;
+
+  header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
   }
-  .nav:hover{border-color:var(--cyan);color:var(--cyan)}
-  .nav:active{transform:scale(.9)}
-  .counter{
-    min-width:120px;text-align:center;font-family:"JetBrains Mono",monospace;
-    font-size:13px;color:var(--muted);
+
+  header p {
+    font-size: 13px;
+    color: var(--text-muted);
   }
-  .counter b{color:var(--ink);font-size:18px}
-  .bar{height:4px;background:rgba(120,160,190,.14);border-radius:99px;overflow:hidden;margin-top:8px}
-  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));transition:width .35s ease}
-  .util{display:flex;gap:10px;justify-content:center;padding:0 16px 6px}
-  .util button{
-    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
-    background:none;border:1px solid var(--line);color:var(--muted);padding:7px 12px;border-radius:8px;cursor:pointer;transition:.18s;
+
+  nav.tabs {
+    display: flex;
+    gap: 8px;
+    background: var(--surface);
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin: 0 auto 18px;
+    max-width: 420px;
   }
-  .util button:hover{color:var(--cyan);border-color:var(--cyan)}
+
+  .tab {
+    flex: 1;
+    padding: 10px 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+
+  .tab:hover { color: var(--text); }
+
+  .tab.active.theorie {
+    background: var(--theorie);
+    color: white;
+  }
+
+  .tab.active.manips {
+    background: var(--manips);
+    color: white;
+  }
+
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 720px;
+    width: 100%;
+    margin: 0 auto 10px;
+    padding: 0 4px;
+  }
+
+  .counter {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 999px;
+    margin: 0 16px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: var(--theorie);
+    border-radius: 999px;
+    transition: width 0.3s ease, background 0.2s ease;
+  }
+
+  body[data-cat="manips"] .progress-bar { background: var(--manips); }
+
+  .card-container {
+    flex: 1;
+    max-width: 720px;
+    width: 100%;
+    margin: 0 auto;
+    perspective: 1400px;
+    display: flex;
+    align-items: stretch;
+    min-height: 340px;
+  }
+
+  .card {
+    width: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+
+  .card.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 20px var(--shadow);
+    padding: 28px 28px 24px;
+    display: flex;
+    flex-direction: column;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow-y: auto;
+  }
+
+  .card-face.back { transform: rotateY(180deg); }
+
+  .card-category {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    align-self: flex-start;
+  }
+
+  body[data-cat="theorie"] .card-category {
+    background: var(--theorie-light);
+    color: var(--theorie);
+  }
+
+  body[data-cat="manips"] .card-category {
+    background: var(--manips-light);
+    color: var(--manips);
+  }
+
+  .question {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--text);
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .answer {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .answer p { margin-bottom: 10px; }
+  .answer p:last-child { margin-bottom: 0; }
+  .answer strong { font-weight: 600; }
+  .answer code {
+    background: var(--bg);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 13px;
+    border: 1px solid var(--border);
+  }
+  .answer .formula {
+    display: block;
+    text-align: center;
+    background: var(--bg);
+    padding: 10px 14px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 13px;
+    color: var(--text);
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .hint {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 16px;
+    flex-shrink: 0;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    max-width: 720px;
+    margin: 18px auto 0;
+    width: 100%;
+  }
+
+  .btn {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 11px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn:hover {
+    background: var(--bg);
+    border-color: #C8C6BC;
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn.primary {
+    background: var(--theorie);
+    color: white;
+    border-color: var(--theorie);
+    flex: 1;
+    justify-content: center;
+  }
+
+  body[data-cat="manips"] .btn.primary {
+    background: var(--manips);
+    border-color: var(--manips);
+  }
+
+  .btn.primary:hover { opacity: 0.92; background: var(--theorie); }
+  body[data-cat="manips"] .btn.primary:hover { background: var(--manips); }
+
+  .btn.icon-only {
+    padding: 11px 14px;
+    min-width: 44px;
+    justify-content: center;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 16px;
+  }
+
+  footer kbd {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 10px;
+  }
+
+  @media (max-width: 520px) {
+    body { padding: 14px 12px 18px; }
+    header h1 { font-size: 19px; }
+    .card-face { padding: 22px 20px 20px; }
+    .question { font-size: 18px; }
+    .answer { font-size: 14px; }
+    .btn { padding: 10px 12px; font-size: 13px; }
+    .controls { gap: 6px; }
+    .card-container { min-height: 380px; }
+  }
 </style>
 </head>
-<body>
+<body data-cat="theorie">
+
 <header>
-  <div class="kicker">IUT Montpellier · BUT3 GEII–ESE</div>
-  <h1>Capteurs &amp; <em>Microsystèmes</em></h1>
-  <div class="sub">Fiches de révision — TD2 · TD3 · TD4 · TD6 + Millman</div>
+  <h1>Flashcards ELEN6</h1>
+  <p>Conception d'amplificateur HF — Préparation TEST</p>
 </header>
 
-<div class="filters" id="filters"></div>
+<nav class="tabs">
+  <button class="tab theorie active" data-cat="theorie">Théorie</button>
+  <button class="tab manips" data-cat="manips">Manips QUCS</button>
+</nav>
 
-<main>
-  <div class="stage">
-    <div class="card" id="card" onclick="flip()">
-      <div class="face" id="face"></div>
+<div class="meta">
+  <span class="counter">Carte <span id="current">1</span> / <span id="total">28</span></span>
+  <div class="progress"><div class="progress-bar" id="progressBar" style="width: 3.5%"></div></div>
+  <button class="btn icon-only" id="shuffle" title="Mélanger" aria-label="Mélanger">⇄</button>
+</div>
+
+<div class="card-container">
+  <div class="card" id="card">
+    <div class="card-face front">
+      <span class="card-category" id="catLabel">Théorie</span>
+      <div class="question" id="question"></div>
+      <div class="hint">Cliquez pour voir la réponse</div>
+    </div>
+    <div class="card-face back">
+      <span class="card-category" id="catLabel2">Théorie</span>
+      <div class="answer" id="answer"></div>
+      <div class="hint">Cliquez pour revenir à la question</div>
     </div>
   </div>
-</main>
-
-<div class="util">
-  <button onclick="shuffleDeck()">↻ Mélanger</button>
-  <button onclick="resetOrder()">↑ Ordre initial</button>
 </div>
 
 <div class="controls">
-  <button class="nav" onclick="prev(event)">‹</button>
-  <div>
-    <div class="counter"><b id="cur">1</b> / <span id="tot">1</span></div>
-    <div class="bar"><i id="prog"></i></div>
-  </div>
-  <button class="nav" onclick="next(event)">›</button>
+  <button class="btn icon-only" id="prev" aria-label="Précédent">←</button>
+  <button class="btn primary" id="flip">Retourner</button>
+  <button class="btn icon-only" id="next" aria-label="Suivant">→</button>
 </div>
 
-<!-- ============ DONNÉES DES CARTES (LaTeX en clair) ============ -->
-<div id="source" style="display:none">
-
-  <!-- ===== CONCEPTS GÉNÉRAUX + AOP ===== -->
-  <div class="fc" data-cat="Concepts"><div class="q">Capteur <b>passif</b> vs capteur <b>actif</b> ?</div><div class="a"><span class="lead">Réponse</span><b>Passif</b> : la sortie est une <b>impédance</b> ($R$, $L$, $C$) qui varie avec le mesurande → il faut une source + un conditionneur pour la lire (Pt100, jauge…). <b>Actif</b> : génère directement une tension/courant (thermocouple, piézo).</div></div>
-
-  <div class="fc" data-cat="Concepts"><div class="q">À quoi sert un <b>conditionneur</b> ?</div><div class="a"><span class="lead">Réponse</span>Transformer la variation d'impédance d'un capteur passif en une <b>tension exploitable</b> : montage potentiométrique, source de courant, pont de Wheatstone…</div></div>
-
-  <div class="fc" data-cat="Concepts"><div class="q">Définition de la <b>sensibilité</b> $S$ ?</div><div class="a"><span class="lead">Réponse</span>$S = \dfrac{d(\text{sortie})}{d(\text{mesurande})}$, par ex. $S=\dfrac{dV_{mes}}{dT}$.<br>C'est la <b>pente</b> de la caractéristique : de combien la sortie bouge par unité de mesurande.</div></div>
-
-  <div class="fc" data-cat="Concepts"><div class="q">Mesurande $m$ vs grandeur d'influence $g$ ?</div><div class="a"><span class="lead">Réponse</span>$m$ = ce qu'on veut mesurer. $g$ = grandeur <b>parasite</b> qui agit aussi sur le capteur (ex : la température sur une jauge de contrainte). On cherche à <b>rejeter</b> $g$.</div></div>
-
-  <div class="fc" data-cat="Concepts"><div class="q">Étendue de mesure (<b>EM</b>) ?</div><div class="a"><span class="lead">Réponse</span>Plage de mesurande exploitable avant saturation :<span class="box">$EM = \dfrac{V_{sat}}{S}$</span>Plus $S$ est grand, plus l'EM est petite (compromis sensibilité ↔ plage).</div></div>
-
-  <div class="fc" data-cat="Concepts"><div class="q">Erreur de <b>mobilité</b> (résolution) d'une chaîne à $N$ digits ?</div><div class="a"><span class="lead">Réponse</span>La pleine échelle est découpée en $10^N$ points.<span class="box">$\text{mobilité} = \dfrac{EM}{10^{N}}$</span>Ex : 4 digits → $10^4$ points → mobilité $= EM/10000$.</div></div>
-
-  <div class="fc" data-cat="Concepts"><div class="q">Les <b>2 règles</b> de l'AOP idéal en contre-réaction ?</div><div class="a"><span class="lead">Réponse</span><b>(1)</b> $V_+ = V_-$ (l'AOP égalise ses entrées).<br><b>(2)</b> $i_+ = i_- = 0$ (impédance d'entrée infinie : aucun courant n'entre).</div></div>
-
-  <div class="fc" data-cat="Concepts"><div class="q">Qu'est-ce qu'une <b>masse virtuelle</b> ?</div><div class="a"><span class="lead">Réponse</span>Quand $V_+$ est à la masse ($0\,\text{V}$), la contre-réaction force $V_- = 0$ <i>sans</i> que ce nœud soit relié physiquement à la masse. On s'en sert pour écrire la loi des nœuds.</div></div>
-
-  <div class="fc" data-cat="Concepts"><div class="q">Gain d'un AOP <b>inverseur</b> et <b>non-inverseur</b> ?</div><div class="a"><span class="lead">Réponse</span>Inverseur : $V_s = -\dfrac{R_f}{R_e}\,V_e$.<br>Non-inverseur : $V_s = \left(1+\dfrac{R_f}{R_e}\right)V_e$.</div></div>
-
-  <!-- ===== MILLMAN ===== -->
-  <div class="fc" data-cat="Millman"><div class="q">Théorème de <b>Millman</b> — à quoi sert-il ?</div><div class="a"><span class="lead">Réponse</span>À calculer le <b>potentiel d'un nœud</b> relié à plusieurs branches (sources + résistances) en <b>une seule formule</b>, sans écrire toutes les mailles.</div></div>
-
-  <div class="fc" data-cat="Millman"><div class="q">Formule de <b>Millman</b> ?</div><div class="a"><span class="lead">Réponse</span><span class="box">$V = \dfrac{\sum_k V_k/R_k}{\sum_k 1/R_k}$</span>Numérateur = somme des (tension de branche ÷ sa résistance). Dénominateur = somme des <b>conductances</b>. Une branche vers la masse ($V_k=0$) compte au dénominateur mais pas au numérateur.</div></div>
-
-  <div class="fc" data-cat="Millman"><div class="q">Millman appliqué à l'entrée $-$ d'un AOP (masse virtuelle) ?</div><div class="a"><span class="lead">Réponse</span>$V_-=0$ → le numérateur de Millman est nul :<span class="box">$\sum_k \dfrac{V_k}{R_k} = 0$</span>C'est exactement la <b>loi des nœuds</b>. Pour un sommateur : $\dfrac{V_{e1}}{R_1}+\dfrac{V_{e2}}{R_2}+\dfrac{V_s}{R_f}=0$.</div></div>
-
-  <div class="fc" data-cat="Millman"><div class="q">Sommateur inverseur (résultat via Millman) ?</div><div class="a"><span class="lead">Réponse</span><span class="box">$V_s = -R_f\left(\dfrac{V_{e1}}{R_1}+\dfrac{V_{e2}}{R_2}+\dots\right)$</span>Chaque entrée pondérée par $R_f/R_k$, le tout <b>inversé</b>.</div></div>
-
-  <!-- ===== TD2 ===== -->
-  <div class="fc" data-cat="TD2"><div class="q">Loi de la <b>Pt100</b> ?</div><div class="a"><span class="lead">TD2</span><span class="box">$R_C(T) = R_0(1+\alpha T)$</span>$R_0 = 100\,\Omega$ (à 0 °C), $\alpha = 3{,}85\cdot10^{-3}\,°C^{-1}$. La résistance augmente avec $T$.</div></div>
-
-  <div class="fc" data-cat="TD2"><div class="q">Pourquoi alimenter la Pt100 par une <b>source de courant</b> constante $I$ ?</div><div class="a"><span class="lead">TD2</span>Loi d'Ohm $U=R\cdot I$ : si $I$ est fixe, la tension aux bornes est l'<b>image directe</b> de $R$, donc de $T$. On s'affranchit des variations de la tension d'alimentation.</div></div>
-
-  <div class="fc" data-cat="TD2"><div class="q">Sortie d'un <b>amplificateur d'instrumentation</b> ?</div><div class="a"><span class="lead">TD2</span><span class="box">$V_{mes} = G\,(e^+ - e^-)$</span>$G$ = gain réglable, impédances d'entrée infinies (aucun courant prélevé sur les entrées).</div></div>
-
-  <div class="fc" data-cat="TD2"><div class="q">Sensibilité d'une Pt100 (courant $I$, gain $G$) ?</div><div class="a"><span class="lead">TD2</span>$V_{mes}=G\,I\,R_0(1+\alpha T)$, donc :<span class="box">$S_{mes} = \dfrac{dV_{mes}}{dT} = G\,I\,R_0\,\alpha$</span></div></div>
-
-  <div class="fc" data-cat="TD2"><div class="q">Réglage de $G$ pour $S_{mes}=0{,}1$ V/°C ($I=5$ mA) ?</div><div class="a"><span class="lead">TD2</span>$G = \dfrac{S_{mes}}{I\,R_0\,\alpha} = \dfrac{0{,}1}{5\cdot10^{-3}\times100\times3{,}85\cdot10^{-3}} \approx 52$</div></div>
-
-  <div class="fc" data-cat="TD2"><div class="q">Résistance d'un <b>fil de liaison</b> ?</div><div class="a"><span class="lead">TD2</span><span class="box">$r = \dfrac{\rho\,l}{S}, \quad S=\pi\left(\dfrac{d}{2}\right)^2$</span>Cuivre : $\rho = 1{,}72\cdot10^{-8}\,\Omega\cdot m$.</div></div>
-
-  <div class="fc" data-cat="TD2"><div class="q">Montage <b>2 fils réel</b> : quelle erreur ?</div><div class="a"><span class="lead">TD2</span>Le courant traverse 2 fils → on mesure $R_C+2r$.<br>Erreur de tension $\delta V = G\,I\,(2r)$.<span class="box">$\delta T = \dfrac{2r}{R_0\,\alpha}$</span></div></div>
-
-  <div class="fc" data-cat="TD2"><div class="q">Pourquoi le montage <b>4 fils</b> annule l'erreur des fils ?</div><div class="a"><span class="lead">TD2</span>2 fils amènent le courant, 2 autres mesurent la tension. Ces derniers vont sur des entrées d'<b>impédance infinie</b> → aucun courant → pas de chute ($U=r\cdot0=0$). Donc $V_{mes}=G\,I\,R_C$, indépendant de $r$.</div></div>
-
-  <!-- ===== TD3 ===== -->
-  <div class="fc" data-cat="TD3"><div class="q">Tension de sortie d'un <b>pont</b> (4 impédances) ?</div><div class="a"><span class="lead">TD3</span><span class="box">$V_M = V_g\!\left(\dfrac{Z_2}{Z_1+Z_2} - \dfrac{Z_4}{Z_3+Z_4}\right)$</span>= différence de deux diviseurs de tension.</div></div>
-
-  <div class="fc" data-cat="TD3"><div class="q">Condition d'<b>équilibre</b> du pont ($V_M=0$) ?</div><div class="a"><span class="lead">TD3</span><span class="box">$Z_1\,Z_4 = Z_2\,Z_3$</span>Produits des branches croisées égaux.</div></div>
-
-  <div class="fc" data-cat="TD3"><div class="q">Formule <b>linéarisée</b> du pont (petites variations, $Z_3=Z_4=R$) ?</div><div class="a"><span class="lead">TD3</span><span class="box">$V_M \approx V_g\,\dfrac{\Delta Z_{c2}-\Delta Z_{c1}}{4\,Z_{c0}}$</span></div></div>
-
-  <div class="fc" data-cat="TD3"><div class="q">LE mécanisme clé du pont ?</div><div class="a"><span class="lead">TD3</span>Il mesure une <b>différence</b> $\Delta Z_{c2}-\Delta Z_{c1}$. Donc :<br>• tout terme <b>commun</b> aux 2 capteurs → <b>s'annule</b><br>• tout terme <b>opposé</b> → <b>se double</b></div></div>
-
-  <div class="fc" data-cat="TD3"><div class="q">Qu'est-ce qu'un montage <b>push-pull</b> ?</div><div class="a"><span class="lead">TD3</span>Deux capteurs qui varient en <b>sens opposé</b> : $\Delta Z_{c1}=-S\Delta m$, $\Delta Z_{c2}=+S\Delta m$. Résultat : <b>sensibilité ×2</b>.</div></div>
-
-  <div class="fc" data-cat="TD3"><div class="q">Pourquoi le push-pull <b>rejette une grandeur d'influence</b> ?</div><div class="a"><span class="lead">TD3</span>Si $g$ agit identiquement sur les 2 capteurs ($+S_g\Delta g$ sur les deux), ce terme est <b>commun</b> → annulé par la différence du pont.</div></div>
-
-  <div class="fc" data-cat="TD3"><div class="q">Pourquoi le push-pull <b>supprime la non-linéarité</b> $\beta(\Delta m)^2$ ?</div><div class="a"><span class="lead">TD3</span>Le carré tue le signe $-$ → $\beta(\Delta m)^2$ est <b>identique</b> sur les 2 capteurs → commun → annulé. Il ne reste que $2\alpha\Delta m$ (linéaire) → sensibilité doublée.</div></div>
-
-  <div class="fc" data-cat="TD3"><div class="q">D'où vient la <b>non-linéarité résiduelle</b> du pont à 1 capteur ?</div><div class="a"><span class="lead">TD3</span>Du dénominateur $2Z_{c0}+\Delta Z_{c1}+\Delta Z_{c2}$. Avec $\frac{1}{1+x}\approx1-x$, le terme $\frac{\Delta Z_{c1}+\Delta Z_{c2}}{2Z_{c0}}$ déforme. En push-pull cette somme $=0$ → linéaire <b>exact</b>.</div></div>
-
-  <!-- ===== TD4 ===== -->
-  <div class="fc" data-cat="TD4"><div class="q">Principe de l'<b>accéléromètre thermique</b> ?</div><div class="a"><span class="lead">TD4</span>Une résistance chauffe un gaz au centre d'une cavité ; 2 détecteurs symétriques. Sous accélération, la <b>convection</b> déplace le gaz chaud → profil asymétrique → écart de température = image de l'accélération. Aucune masse mobile.</div></div>
-
-  <div class="fc" data-cat="TD4"><div class="q">Les <b>3 « delta T »</b> à ne pas confondre ?</div><div class="a"><span class="lead">TD4</span>$\Delta T$ = hauteur du gradient (la bosse de chaleur).<br>$\delta T_{det}$ = écart <b>total</b> entre les 2 détecteurs (info utile).<br>$\Delta T_d$ = variation d'<b>un seul</b> détecteur.</div></div>
-
-  <div class="fc" data-cat="TD4"><div class="q">Relations de l'accéléromètre + nombre de <b>Rayleigh</b> ?</div><div class="a"><span class="lead">TD4</span>$\delta T_{det} = \Delta T\cdot Ra\cdot K$ avec $Ra = \dfrac{\rho^2\,\Gamma\,\beta\,C_p}{\mu\,\lambda}\,\Delta T\,l_m^3$.<span class="box">$\Rightarrow\ \delta T_{det} \propto (\Delta T)^2\cdot\Gamma$</span>($\Gamma$ = accélération subie.)</div></div>
-
-  <div class="fc" data-cat="TD4"><div class="q">De quoi dépend la <b>sensibilité</b> de l'accéléromètre ?</div><div class="a"><span class="lead">TD4</span>$S=\dfrac{\delta T_{det}}{\Gamma}\propto \dfrac{\rho^2\beta C_p\,l_m^3}{\mu\,\lambda}(\Delta T)^2$. À retenir : $S\propto(\Delta T)^2$ et $S\propto \dfrac{1}{\lambda}$ (un gaz peu conducteur est meilleur).</div></div>
-
-  <div class="fc" data-cat="TD4"><div class="q">Comment <b>vérifier la loi</b> avec 2 points de mesure ?</div><div class="a"><span class="lead">TD4</span>On teste les rapports :<br>• si $S\propto(\Delta T)^2$ : $\dfrac{S_2}{S_1}=\left(\dfrac{\Delta T_2}{\Delta T_1}\right)^2$<br>• si $S\propto1/\lambda$ : $\dfrac{S_2}{S_1}=\dfrac{\lambda_1}{\lambda_2}$<br>Si les rapports collent → loi validée.</div></div>
-
-  <div class="fc" data-cat="TD4"><div class="q">Lien $\delta T_{det} \leftrightarrow \Delta T_d$ et $\Delta R$ ?</div><div class="a"><span class="lead">TD4</span>Push-pull : un détecteur $+\Delta T_d$, l'autre $-\Delta T_d$ → écart double :<span class="box">$\delta T_{det}=2\,\Delta T_d \quad;\quad \Delta R = R_0\,\alpha\,\Delta T_d$</span></div></div>
-
-  <div class="fc" data-cat="TD4"><div class="q">Sortie du <b>pont push-pull</b> ($R_1=R_n-\Delta R$, $R_2=R_n+\Delta R$, $R_3=R_4=R_n$) ?</div><div class="a"><span class="lead">TD4</span><span class="box">$V_m = \dfrac{E_s\,\Delta R}{2R_n}$</span>Linéaire <b>exact</b> en $\Delta R$ (avantage du push-pull).</div></div>
-
-  <div class="fc" data-cat="TD4"><div class="q">La <b>chaîne de mesure complète</b> de l'accéléromètre ?</div><div class="a"><span class="lead">TD4</span>$\Gamma \to \delta T_{det}(=S\Gamma) \to \Delta T_d(=\frac{\delta T_{det}}{2}) \to \Delta R(=R_0\alpha\Delta T_d) \to V_m(=\frac{E_s\Delta R}{2R_n})$<span class="box">$V_m = \dfrac{E_s\,\alpha\,S}{4}\,\Gamma$ (si $R_0=R_n$)</span></div></div>
-
-  <!-- ===== TD5 ===== -->
-  <div class="fc" data-cat="TD5"><div class="q">Capacité $C_0$ d'un condensateur plan quand la cuve est <b>vide</b> ?</div><div class="a"><span class="lead">TD5 · Q1</span>Condensateur plan, diélectrique = air ($\varepsilon_1$) :<span class="box">$C_0 = \dfrac{\varepsilon_1\,S}{e}$</span>$S$ = surface des armatures, $e$ = écartement.</div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Pourquoi $C(x)=C_0(1+Kx)$ pour le capteur de niveau ?</div><div class="a"><span class="lead">TD5 · Q2</span>L'huile à hauteur $x$ découpe le condensateur en <b>deux capas en parallèle</b> : partie immergée (huile $\varepsilon_2$, surface $\frac{x}{h}S$) + partie air ($\varepsilon_1$, surface $\frac{h-x}{h}S$). Leur somme donne :<span class="box">$C(x)=\dfrac{\varepsilon_1 S}{e}\!\left[1+\dfrac{\varepsilon_2-\varepsilon_1}{\varepsilon_1}\dfrac{x}{h}\right]$</span></div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Valeur de $K$ dans $C(x)=C_0(1+Kx)$ ?</div><div class="a"><span class="lead">TD5 · Q2</span><span class="box">$K=\dfrac{\varepsilon_2-\varepsilon_1}{\varepsilon_1\,h}$</span>C'est la sensibilité du capteur (en $m^{-1}$). AN : $K = 3\ m^{-1}$.</div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Capacités <b>min</b> et <b>max</b> du capteur ?</div><div class="a"><span class="lead">TD5 · Q2</span>$C_{min}=C_0=\frac{\varepsilon_1 S}{e}$ (vide), $C_{max}=C(h)=\frac{\varepsilon_2 S}{e}=C_0(1+Kh)$.<br>Comme $Kh=\frac{\varepsilon_2-\varepsilon_1}{\varepsilon_1}=3$ → $C_{max}=4C_0$.<span class="box">$C_{min}\approx 35{,}4\text{ pF},\quad C_{max}\approx 142\text{ pF}$</span></div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Impédance d'un condensateur en sinusoïdal ?</div><div class="a"><span class="lead">TD5</span>$\underline{Z}=\dfrac{1}{jC\omega}$, module $|Z|=\dfrac{1}{2\pi f C}$. Grande $C$ → petite impédance.<span class="box">à 10 kHz : $Z_{max}\approx 450\text{ k}\Omega$ (vide), $Z_{min}\approx 112\text{ k}\Omega$ (plein)</span></div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Comment se partage la tension entre 2 condensateurs en série ?</div><div class="a"><span class="lead">TD5</span>À l'<b>inverse</b> des capacités (contraire des résistances) : la plus petite $C$ prend le plus de tension.<span class="box">$V_{C_2}=V_g\,\dfrac{C_1}{C_1+C_2}$</span></div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">$V_{mes}$ du <b>pont capacitif</b> ($C(x)$ &amp; $C_v$ à gauche, $R$ &amp; $R$ à droite) ?</div><div class="a"><span class="lead">TD5 · Q3</span>Diviseur capacitif : $V_A=V_g\dfrac{C(x)}{C(x)+C_v}$, et $V_B=\dfrac{V_g}{2}$. Avec $C_v=C_0$ :<span class="box">$V_{mes}=V_g\!\left(\dfrac{C(x)}{C(x)+C_0}-\dfrac12\right)$</span></div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">$V_{mes}$ en fonction de $x$, $K$, $V_g$ ?</div><div class="a"><span class="lead">TD5 · Q3</span>En injectant $C(x)=C_0(1+Kx)$ :<span class="box">$V_{mes}=\dfrac{V_g\,Kx}{2\,(2+Kx)}$</span><b>Non-linéaire</b> ($Kx$ au dénominateur) : part de 0, croît puis sature. AN : $V_{mes}(h)=3$ V pour $V_g=10$ V.</div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Pourquoi la <b>forme des armatures</b> (plan, coaxial, tige+paroi) ne change rien ?</div><div class="a"><span class="lead">TD5 · Q4</span>Avec $C_l$ = capacité par unité de longueur (cuve vide) : $C(x)=C_l(h-x)+C_l\frac{\varepsilon_2}{\varepsilon_1}x = C_0(1+Kx)$, <b>même forme</b>. Seul compte le niveau $x$, pas la section.</div></div>
-
-  <div class="fc" data-cat="TD5"><div class="q">Quel <b>problème majeur</b> peut fausser la mesure ?</div><div class="a"><span class="lead">TD5 · Q5</span>La permittivité $\varepsilon_2$ du liquide varie avec la <b>température</b> et la <b>composition</b> — surtout la présence d'<b>eau</b> ($\varepsilon\approx80$, conductrice). Cela change $K$ → erreur de niveau. C'est la grandeur d'influence principale.</div></div>
-
-  <!-- ===== TD6 ===== -->
-  <div class="fc" data-cat="TD6"><div class="q">Pourquoi un pont alimenté en <b>tension fixe</b> est non-linéaire ?</div><div class="a"><span class="lead">TD6</span><span class="box">$V_A = \dfrac{E\,\Delta R}{2R_0+\Delta R}$</span>Le $\Delta R$ au <b>dénominateur</b> rend la réponse non proportionnelle à $\Delta R$.</div></div>
-
-  <div class="fc" data-cat="TD6"><div class="q">Principe de la <b>linéarisation par contre-réaction</b> ?</div><div class="a"><span class="lead">TD6</span>On rend la tension d'alimentation $E$ du pont <b>dépendante de la sortie</b> $V_s$. En bouclant correctement, le $\Delta R$ du dénominateur est compensé → réponse linéaire.</div></div>
-
-  <div class="fc" data-cat="TD6"><div class="q">Expression de $E$ (sommateur inverseur : $R_5$ sur $V_s$, $R_6$ pour $V_{ref}$ et la réaction) ?</div><div class="a"><span class="lead">TD6 · I-2</span>Masse virtuelle $V_-=0$ → loi des nœuds :<br>$\dfrac{V_s}{R_5}+\dfrac{V_{ref}}{R_6}+\dfrac{E}{R_6}=0$<span class="box">$E = -\dfrac{R_6}{R_5}\,V_s - V_{ref}$</span></div></div>
-
-  <div class="fc" data-cat="TD6"><div class="q">Condition de <b>linéarité</b> du montage (I-4) ?</div><div class="a"><span class="lead">TD6 · I-4</span><span class="box">$\dfrac{R_6}{R_5} = \dfrac{R}{R+2R_f}$</span>Alors le $\Delta R$ disparaît du dénominateur et $V_s \propto \dfrac{\Delta R}{R}$ (linéaire).</div></div>
-
-</div>
-<!-- ============ FIN DONNÉES ============ -->
+<footer>
+  <kbd>←</kbd> <kbd>→</kbd> naviguer · <kbd>espace</kbd> retourner · <kbd>s</kbd> mélanger
+</footer>
 
 <script>
-  // --- Construire le deck depuis le DOM (LaTeX en clair, pas d'échappement JS) ---
-  const all = [...document.querySelectorAll('#source .fc')].map(el => ({
-    cat: el.dataset.cat,
-    q: el.querySelector('.q').innerHTML,
-    a: el.querySelector('.a').innerHTML
-  }));
-
-  const cats = ['Tout', ...[...new Set(all.map(c => c.cat))]];
-  let activeCat = 'Tout';
-  let deck = [...all];
-  let i = 0, flipped = false;
-
-  // --- Filtres ---
-  const fwrap = document.getElementById('filters');
-  cats.forEach(cat => {
-    const b = document.createElement('button');
-    b.className = 'chip' + (cat === 'Tout' ? ' on' : '');
-    b.textContent = cat === 'Tout' ? 'Tout ('+all.length+')' : cat;
-    b.onclick = () => { activeCat = cat; rebuild(); [...fwrap.children].forEach(c=>c.classList.remove('on')); b.classList.add('on'); };
-    fwrap.appendChild(b);
-  });
-
-  function rebuild(){
-    deck = activeCat === 'Tout' ? [...all] : all.filter(c => c.cat === activeCat);
-    i = 0; flipped = false;
-    render();
-  }
-
-  function render(){
-    const c = deck[i];
-    const face = document.getElementById('face');
-    const card = document.getElementById('card');
-    card.classList.toggle('flipped', flipped);
-    if(!flipped){
-      face.innerHTML =
-        '<div class="meta"><span class="tag">'+c.cat+'</span><span class="side">Question</span></div>'+
-        '<div class="content"><div class="q">'+c.q+'</div></div>'+
-        '<div class="hint">Touchez la carte pour révéler ↦</div>';
-    } else {
-      face.innerHTML =
-        '<div class="meta"><span class="tag">'+c.cat+'</span><span class="side ans">Réponse</span></div>'+
-        '<div class="content"><div class="a">'+c.a+'</div></div>';
+const cards = {
+  theorie: [
+    {
+      q: "Pourquoi Z_S = Z_L = 50 Ω pour mesurer les paramètres S ?",
+      a: "<p>Les paramètres S sont normalisés sur une impédance de référence Z₀ = 50 Ω.</p><p>Pour extraire un paramètre <code>S_ij</code> isolément, il faut annuler l'onde incidente du port j (<code>a_j = 0</code>). Cette condition n'est obtenue que si la charge sur ce port est parfaitement adaptée à 50 Ω.</p><p>Sinon, une partie de l'onde sortante <code>b_j</code> est réfléchie et revient sous forme d'onde incidente non nulle, ce qui fausse la mesure.</p>"
+    },
+    {
+      q: "Que signifie S₂₁ ?",
+      a: "<p><strong>S₂₁ = b₂/a₁ quand a₂ = 0</strong></p><p>C'est la transmission directe : onde envoyée sur le port 1 → mesurée à la sortie du port 2. C'est le <strong>gain</strong> de l'amplificateur.</p><span class='formula'>|S₂₁|² = G₀ (gain en puissance)</span><p>En dB : G(dB) = 20·log|S₂₁| = 10·log|S₂₁|²</p>"
+    },
+    {
+      q: "Que signifie S₁₁ ?",
+      a: "<p><strong>S₁₁ = b₁/a₁ quand a₂ = 0</strong></p><p>Réflexion à l'entrée. Sur l'abaque de Smith, S₁₁ donne directement l'impédance d'entrée du transistor.</p><p>• |S₁₁| = 0 → adaptation parfaite<br>• |S₁₁| = 1 → réflexion totale<br>• En pratique on veut |S₁₁| &lt; −10 dB</p>"
+    },
+    {
+      q: "Que signifie S₁₂ ?",
+      a: "<p><strong>S₁₂ = b₁/a₂ quand a₁ = 0</strong></p><p>Transmission inverse (sortie → entrée) = <strong>isolation</strong>. On veut |S₁₂| <em>le plus petit possible</em>.</p><p>• À BF : excellente isolation (~−60 dB)<br>• À HF : se dégrade à cause du couplage capacitif interne base-collecteur.</p><p>Une mauvaise isolation favorise l'instabilité.</p>"
+    },
+    {
+      q: "Que signifie S₂₂ ?",
+      a: "<p><strong>S₂₂ = b₂/a₂ quand a₁ = 0</strong></p><p>Réflexion à la sortie, symétrique de S₁₁ mais côté sortie. Sa position sur l'abaque de Smith donne l'impédance de sortie du transistor.</p><p>On veut |S₂₂| faible (typiquement &lt; −10 dB) pour une bonne adaptation.</p>"
+    },
+    {
+      q: "Mnémonique pour les indices S_(destination)(source)",
+      a: "<p>Le <strong>premier indice</strong> = où l'onde arrive (destination, ligne de la matrice).</p><p>Le <strong>deuxième indice</strong> = d'où l'onde vient (source, colonne).</p><p>Exemples :<br>• <strong>S₂₁</strong> : venue du 1, arrivée au 2 = gain (1→2)<br>• <strong>S₁₂</strong> : venue du 2, arrivée au 1 = isolation (2→1)</p><p>Comme une matrice : ligne, colonne.</p>"
+    },
+    {
+      q: "Rôle de l'inductance (RFC) dans un té de polarisation",
+      a: "<p><span class='formula'>Z_L = jLω</span><p>• En DC (ω = 0) : Z_L = 0 → laisse passer le courant de polarisation<br>• En HF (1 GHz, L=47nH) : Z_L ≈ 295 Ω → bloque le signal RF qui ne peut pas s'échapper vers l'alimentation</p><p><strong>Sans elle</strong> : l'alim DC court-circuiterait la RF à la masse → gain effondré.</p>"
+    },
+    {
+      q: "Rôle du condensateur (DC-block) dans un té de polarisation",
+      a: "<p><span class='formula'>Z_C = 1 / jCω</span><p>• En DC : Z_C = ∞ → bloque la composante continue → polarisation conservée sur le transistor<br>• En HF (1 GHz, C=100pF) : Z_C ≈ 1,6 Ω → laisse passer le signal RF</p><p><strong>Sans lui</strong> : le port 50 Ω court-circuiterait la tension de polarisation → V_BE = 0, transistor bloqué.</p>"
+    },
+    {
+      q: "Règle de dimensionnement d'un té de polarisation",
+      a: "<p>À la fréquence de travail, vérifier <strong>simultanément</strong> :</p><span class='formula'>|Z_L| ≫ 50 Ω  ET  |Z_C| ≪ 50 Ω</span><p>Un facteur 5 à 10 de chaque côté est largement suffisant.</p><p><strong>Exemple à 1 GHz</strong> : L = 47 nH (Z_L = 295 Ω, facteur 6) et C = 100 pF (Z_C = 1,6 Ω, facteur 30).</p>"
+    },
+    {
+      q: "Formule du gain transducique G_T",
+      a: "<span class='formula'>G_T = |S₂₁|² · (1−|Γ_S|²)(1−|Γ_L|²) / |1−S₁₁·Γ_S|² · |1−S₂₂·Γ_L|²</span><p>Se décompose en trois termes :</p><span class='formula'>G_T = G_S × G₀ × G_L</span><p>où G_S et G_L sont les gains apportés par les cellules d'adaptation d'entrée et de sortie, et G₀ = |S₂₁|² est le gain brut du transistor.</p>"
+    },
+    {
+      q: "Cas particulier G₀ quand Γ_S = Γ_L = 0",
+      a: "<p>Si source et charge sont à 50 Ω (Γ_S = Γ_L = 0), tous les termes correctifs valent 1, et G_T se simplifie :</p><span class='formula'>G₀ = |S₂₁|²</span><p>C'est le gain « brut » du transistor, sans aucune adaptation. Sert de référence pour évaluer l'apport des circuits d'adaptation.</p>"
+    },
+    {
+      q: "Conditions d'adaptation conjuguée (gain max)",
+      a: "<p>Pour obtenir le gain maximal du transistor :</p><span class='formula'>Γ_in = Γ_S*   ET   Γ_out = Γ_L*</span><p>(adaptation conjuguée aux deux ports)</p><p>Quand ces deux conditions sont vérifiées simultanément, G_T atteint sa valeur maximale G_T,max. C'est ce que QUCS calcule via « Calculate two-port matching ».</p>"
+    },
+    {
+      q: "Définition de Δ (déterminant de la matrice S)",
+      a: "<span class='formula'>Δ = S₁₁·S₂₂ − S₁₂·S₂₁</span><p>C'est le déterminant de la matrice S 2×2.</p><p>Utilisé dans le critère de stabilité de Rollet. Doit vérifier |Δ| &lt; 1 pour une stabilité inconditionnelle.</p>"
+    },
+    {
+      q: "Définition du facteur de Rollet K",
+      a: "<span class='formula'>K = (1 − |S₁₁|² − |S₂₂|² + |Δ|²) / (2·|S₁₂|·|S₂₁|)</span><p>Permet de tester la stabilité d'un amplificateur.</p><p>Sous QUCS : fonction <code>rollet()</code>, automatiquement disponible après une simulation S-parameter.</p>"
+    },
+    {
+      q: "Critère de stabilité inconditionnelle",
+      a: "<p><strong>Les DEUX conditions simultanément :</strong></p><span class='formula'>K &gt; 1   ET   |Δ| &lt; 1</span><p>Dans cette plage de fréquences, l'amplificateur ne peut <strong>jamais</strong> osciller, quel que soit le choix de Z_S et Z_L (à l'intérieur de l'abaque de Smith).</p><p>Piège : K &gt; 1 seul ne suffit pas !</p>"
+    },
+    {
+      q: "Stabilité conditionnelle : que faire ?",
+      a: "<p>Quand K &lt; 1 ou |Δ| &gt; 1, certaines valeurs de Z_S ou Z_L peuvent rendre le circuit instable (oscillation).</p><p><strong>Méthode</strong> : tracer les cercles de stabilité sur l'abaque de Smith :<br>• <code>stabS()</code> côté source<br>• <code>stabL()</code> côté charge</p><p>Choisir Z_S et Z_L <strong>en dehors</strong> des zones interdites (à l'intérieur des cercles).</p>"
+    },
+    {
+      q: "Conversion Γ ↔ Z",
+      a: "<span class='formula'>Γ = (Z − Z₀) / (Z + Z₀)</span><span class='formula'>Z = Z₀ · (1 + Γ) / (1 − Γ)</span><p>avec Z₀ = 50 Ω.</p><p><strong>Centre de l'abaque de Smith</strong> : Γ = 0 ↔ Z = 50 Ω (adaptation parfaite).</p>"
+    },
+    {
+      q: "Conversion dB ↔ linéaire (puissance)",
+      a: "<span class='formula'>G(dB) = 10·log(G_lin)</span><span class='formula'>G_lin = 10^(G(dB)/10)</span><p><strong>Repères à connaître :</strong><br>• 3 dB ↔ ×2<br>• 6 dB ↔ ×4<br>• 10 dB ↔ ×10<br>• 20 dB ↔ ×100<br>• −3 dB ↔ ÷2</p>"
+    },
+    {
+      q: "Que mesure le facteur de bruit NF ?",
+      a: "<p>NF mesure la dégradation du rapport signal/bruit entre l'entrée et la sortie d'un amplificateur.</p><span class='formula'>NF = (S_E/N_E) / (S_S/N_S)</span><p>• Idéalement NF = 0 dB (aucun bruit ajouté) → irréalisable<br>• En pratique : NF_min entre 1 et 5 dB selon le transistor et le point de polarisation</p>"
+    },
+    {
+      q: "Différence entre NF, NF_min et S_opt",
+      a: "<p><strong>NF</strong> : facteur de bruit obtenu avec les impédances actuelles présentées au transistor.</p><p><strong>NF_min</strong> : valeur <em>minimale</em> physiquement atteignable pour ce transistor à ce point de polarisation.</p><p><strong>S_opt (= Γ_opt)</strong> : coefficient de réflexion à présenter en entrée pour atteindre NF_min.</p><p>Si Γ_S = 0 (port 50 Ω), alors NF &gt; NF_min.</p>"
+    },
+    {
+      q: "Pourquoi un LNA et un PA ont des compromis opposés",
+      a: "<p><strong>LNA</strong> (Low Noise Amplifier) : faible I_C → faible bruit ET gain max, mais puissance de sortie limitée.</p><p><strong>PA</strong> (Power Amplifier) : fort I_C → forte puissance, mais gain plus modeste ET bruit dégradé.</p><p>Exemples :<br>• BFR92A (I_C = 18 mA) → plutôt LNA<br>• BFG135 (I_C = 100 mA) → plutôt PA</p>"
+    },
+    {
+      q: "Comportement de S₂₁ avec la fréquence",
+      a: "<p>|S₂₁| <strong>décroît</strong> avec la fréquence — comportement universel d'un transistor.</p><p><strong>Cause physique</strong> : les capacités parasites internes filtrent les hautes fréquences.</p><p>À l'approche de f_T (fréquence de transition), le gain s'effondre à 1 (= 0 dB). Au-delà, le transistor n'amplifie plus.</p>"
+    },
+    {
+      q: "Comportement de S₁₂ avec la fréquence",
+      a: "<p>|S₁₂| <strong>croît</strong> avec la fréquence (à l'inverse de S₂₁).</p><p>• À BF : excellente isolation (~−60 dB)<br>• À HF : le couplage capacitif interne base-collecteur (capacité C_re) dégrade l'isolation</p><p>Conséquence : une mauvaise isolation favorise les boucles de retour → instabilité.</p>"
+    },
+    {
+      q: "Point de compression −1 dB",
+      a: "<p>Niveau de puissance d'entrée à partir duquel le gain réel devient inférieur de 1 dB à sa valeur asymptotique linéaire.</p><p><strong>Au-delà</strong> : saturation, distorsion, apparition d'harmoniques (2, 3, …).</p><p>C'est la <strong>limite supérieure de la zone linéaire</strong> de l'amplificateur. Toute application linéaire (LNA) doit fonctionner en dessous de ce point.</p>"
+    },
+    {
+      q: "Cercle à gain constant : à quoi ça sert ?",
+      a: "<p>Sur l'abaque de Smith, un cercle <code>GaCircle(G)</code> regroupe <strong>tous les Γ_S qui donnent un gain G</strong>.</p><p><strong>Utilité</strong> : choisir un Γ_S parmi plusieurs candidats, par exemple pour :<br>• élargir la bande passante au prix d'un gain plus faible<br>• faire un compromis gain / bruit (intersection avec un cercle de bruit)</p>"
+    },
+    {
+      q: "Cercle à bruit constant : à quoi ça sert ?",
+      a: "<p>Un cercle <code>noiseCircle(NF)</code> regroupe <strong>tous les Γ_S qui donnent un facteur de bruit NF</strong>.</p><p>En traçant <strong>ensemble</strong> un cercle de gain et un cercle de bruit, on trouve à leur intersection le ou les Γ_S qui satisfont <em>simultanément</em> les deux contraintes : c'est la méthode du compromis gain–bruit.</p>"
+    },
+    {
+      q: "PIÈGE : unités GaCircle vs noiseCircle",
+      a: "<p><strong>Source d'erreur n°1 sur la copie !</strong></p><p>• <code>GaCircle(valeur)</code> attend la valeur <strong>en linéaire</strong><br>Ex : G = 10 dB → <code>GaCircle(10)</code></p><p>• <code>noiseCircle(valeur)</code> attend la valeur <strong>en dB</strong><br>Ex : NF = 5 dB → <code>noiseCircle(5)</code></p><p>Mélanger les unités fait planter complètement la question.</p>"
+    },
+    {
+      q: "Pourquoi le gain max n'est pas toujours souhaitable",
+      a: "<p>L'adaptation conjuguée donne le gain MAX, mais :</p><p>• Bande passante étroite<br>• Sensible aux variations des composants<br>• Peut être loin du point de bruit minimal (S_opt)<br>• Risque d'instabilité accru</p><p>Avec les cercles à gain constant, on peut choisir un gain légèrement inférieur pour <strong>gagner en bande passante, en bruit, ou en stabilité</strong>.</p>"
     }
-    // re-trigger l'animation
-    face.style.animation='none'; void face.offsetWidth; face.style.animation='';
-    document.getElementById('cur').textContent = i+1;
-    document.getElementById('tot').textContent = deck.length;
-    document.getElementById('prog').style.width = ((i+1)/deck.length*100)+'%';
-    typeset(face);
-  }
-
-  function typeset(el){
-    if(window.renderMathInElement){
-      renderMathInElement(el,{delimiters:[
-        {left:'$$',right:'$$',display:true},
-        {left:'$',right:'$',display:false}
-      ],throwOnError:false});
+  ],
+  manips: [
+    {
+      q: "Vérifier le point de polarisation DC",
+      a: "<p>1. Ajouter un bloc <code>DC simulation</code> (DC1)<br>2. Régler V1 (V_BE) et V2 (V_CE) aux valeurs cibles<br>3. Insérer un probe de courant sur le collecteur<br>4. Lancer la simulation<br>5. Lire <code>Pr1.I</code> dans les résultats → doit correspondre à I_C visé</p><p>Pour tracer I_C = f(V_BE) : ajouter un bloc <code>sweep</code> paramétrique sur V_BE.</p>"
+    },
+    {
+      q: "Ajouter un té de polarisation côté base",
+      a: "<p><strong>Sur le chemin RF</strong> (entre P1 et la base) :<br>• Condensateur série (DC-block, ex : 100 pF)</p><p><strong>Sur la branche d'alimentation</strong> (entre V_BE et la base) :<br>• Inductance série (RFC, ex : 47 nH)</p><p>Idem côté collecteur avec V_CE.</p><p>Vérifier que |Z_L| ≫ 50 Ω et |Z_C| ≪ 50 Ω à la fréquence de travail.</p>"
+    },
+    {
+      q: "Configurer une simulation S-parameter",
+      a: "<p>Bloc <code>s-parameter</code> (SP1) avec :</p><p>• <strong>Type</strong> : <code>log</code> (pour large bande) ou <code>lin</code> (pour 1 point précis)<br>• <strong>Start, Stop</strong> : bornes de fréquence<br>• <strong>Points</strong> : nombre de points (200 pour large bande)</p><p>Pour relever à 1 GHz précis : Start = Stop = 1 GHz, Points = 1.</p>"
+    },
+    {
+      q: "Afficher S₁₁ et S₂₂ sur l'abaque de Smith",
+      a: "<p>1. Insérer un diagramme <code>Smith Chart</code><br>2. Glisser-déposer <code>S[1,1]</code> et <code>S[2,2]</code> dans le diagramme<br>3. Optionnel : ajouter un marker (curseur) pour lire les valeurs à une fréquence précise</p><p>La position du point sur l'abaque donne directement l'impédance correspondante.</p>"
+    },
+    {
+      q: "Afficher S₂₁ et S₁₂ en représentation polaire",
+      a: "<p>1. Insérer un diagramme <code>Polar</code><br>2. Ajouter <code>S[2,1]</code> et <code>S[1,2]</code></p><p>Affiche simultanément le <strong>module</strong> (distance au centre) et la <strong>phase</strong> (angle).</p><p>Utile pour observer le gain et son déphasage en même temps.</p>"
+    },
+    {
+      q: "Tracer le gain en dB en fonction de la fréquence",
+      a: "<p>1. Insérer un diagramme <code>cartésien</code><br>2. Ajouter la fonction <code>dB(S[2,1])</code></p><p>Donne directement : 20·log|S₂₁| = 10·log|S₂₁|² = G₀(dB)</p><p>Allure : courbe décroissante avec la fréquence.</p>"
+    },
+    {
+      q: "Activer le calcul du facteur de bruit",
+      a: "<p>Sur le bloc <code>s-parameter</code> SP1 :</p><p>1. Clic droit → <strong>Properties</strong> (ou double-clic)<br>2. Onglet <strong>Properties</strong><br>3. Cocher <code>Noise = yes</code><br>4. Vérifier <code>NoiseIP = 1</code> et <code>NoiseOP = 2</code></p><p>Les variables <code>NF</code>, <code>NFmin</code>, <code>Sopt</code> deviennent disponibles dans les résultats.</p>"
+    },
+    {
+      q: "Tracer le facteur de Rollet K",
+      a: "<p>1. Insérer un diagramme <code>cartésien</code><br>2. Tracer la fonction <code>rollet()</code> (sortie automatique de la simulation S-parameter)<br>3. Ajouter aussi <code>detS()</code> pour le déterminant Δ</p><p>Repérer la fréquence où K = 1 (avec un curseur). C'est la frontière entre stabilité conditionnelle (K&lt;1) et inconditionnelle (K&gt;1).</p>"
+    },
+    {
+      q: "Tracer les cercles de stabilité sur Smith",
+      a: "<p>Sur l'abaque de Smith, ajouter :</p><p>• <code>stabS()</code> : cercle de stabilité côté source<br>• <code>stabL()</code> : cercle de stabilité côté charge</p><p><strong>Lecture</strong> : les zones <em>à l'intérieur</em> des cercles correspondent aux impédances qui rendent le circuit instable → à éviter absolument pour Z_S et Z_L.</p>"
+    },
+    {
+      q: "Utiliser l'outil Matching Circuit",
+      a: "<p>1. Menu <strong>Tools → Matching Circuit Synthesis</strong><br>2. Cocher <strong>calculate two-port matching</strong><br>3. Reference Impedance : Port 1 = 50 Ω, Port 2 = 50 Ω<br>4. Renseigner les paramètres S à 1 GHz (format mag/deg)<br>5. Frequency = 1 GHz<br>6. Cliquer <strong>Create</strong></p><p>QUCS génère 2 cellules L-C à insérer dans le schéma de part et d'autre du transistor.</p>"
+    },
+    {
+      q: "Tracer un cercle à gain constant sur Smith",
+      a: "<p>Sur l'abaque de Smith, ajouter :</p><p>• <code>GaCircle(valeur)</code> : cercle à gain disponible constant<br>• <code>GpCircle(valeur)</code> : cercle à gain en puissance constant</p><p><strong>⚠ ATTENTION</strong> : la valeur est en <strong>LINÉAIRE</strong>, pas en dB.</p><p>Ex : pour G = 10 dB, utiliser <code>GaCircle(10)</code> (pas 20 !).</p>"
+    },
+    {
+      q: "Tracer un cercle à bruit constant sur Smith",
+      a: "<p>Sur l'abaque de Smith, ajouter :</p><p><code>noiseCircle(valeur)</code></p><p><strong>⚠ ATTENTION</strong> : la valeur est en <strong>dB</strong> (contrairement à GaCircle).</p><p>Ex : pour NF = 5 dB, utiliser <code>noiseCircle(5)</code>.</p><p>Pour le compromis gain/bruit : tracer un <code>GaCircle</code> et un <code>noiseCircle</code> sur le même abaque, et lire l'intersection.</p>"
+    },
+    {
+      q: "Lire les paramètres S à une fréquence précise",
+      a: "<p><strong>Méthode rapide :</strong></p><p>1. Configurer un sweep S-parameter à 1 point :<br>   Start = Stop = f_visée, Points = 1<br>2. Insérer un diagramme <code>table</code><br>3. Ajouter <code>S[1,1]</code>, <code>S[1,2]</code>, <code>S[2,1]</code>, <code>S[2,2]</code></p><p>Lecture directe en module/phase.</p>"
+    },
+    {
+      q: "Configurer une simulation Harmonic Balance (fort signal)",
+      a: "<p>1. Bloc <code>harmonic balance</code> (HB1) à 1 GHz<br>2. Remplacer P1 par une source de puissance avec paramètre <code>P = pe</code> (sweepable)<br>3. Ajouter un sweep linéaire de <code>pe</code> entre 1 µW (−30 dBm) et 30 mW (+15 dBm)<br>4. Donner un nom (label) au nœud de sortie : <code>Vout</code></p><p>HB calcule le signal à la fondamentale ET aux harmoniques.</p>"
+    },
+    {
+      q: "Tracer P_out vs P_in en simulation HB",
+      a: "<p>Diagramme cartésien :</p><p>• <strong>Axe X</strong> : <code>10*log(pe*1000)</code> (P_E en dBm)<br>• <strong>Axe Y</strong> : <code>dBm(Vout.Vb, 1e9)</code> (P_S en dBm à la fondamentale 1 GHz)</p><p>Repère : le point de compression −1 dB est où la courbe s'écarte de 1 dB sous l'asymptote linéaire.</p>"
+    },
+    {
+      q: "Calculer le coefficient de réflexion fort signal",
+      a: "<p>À partir de la simulation HB :</p><p>1. Relever V_in et I_in à la fréquence fondamentale<br>2. Calculer Z_in = V_in / I_in</p><span class='formula'>Γ_in = (Z_in − 50) / (Z_in + 50)</span><p>À comparer avec Γ_in petit-signal (S₁₁) : la différence apparaît quand on s'approche du point de compression.</p>"
     }
+  ]
+};
+
+const state = {
+  category: 'theorie',
+  index: 0,
+  order: []
+};
+
+const elCard = document.getElementById('card');
+const elQuestion = document.getElementById('question');
+const elAnswer = document.getElementById('answer');
+const elCurrent = document.getElementById('current');
+const elTotal = document.getElementById('total');
+const elCatLabel = document.getElementById('catLabel');
+const elCatLabel2 = document.getElementById('catLabel2');
+const elProgress = document.getElementById('progressBar');
+
+function initOrder() {
+  state.order = cards[state.category].map((_, i) => i);
+}
+
+function shuffle() {
+  for (let i = state.order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [state.order[i], state.order[j]] = [state.order[j], state.order[i]];
   }
+  state.index = 0;
+  render();
+}
 
-  function flip(){ flipped = !flipped; render(); }
-  function next(e){ if(e) e.stopPropagation(); i=(i+1)%deck.length; flipped=false; render(); }
-  function prev(e){ if(e) e.stopPropagation(); i=(i-1+deck.length)%deck.length; flipped=false; render(); }
-  function shuffleDeck(){ for(let k=deck.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[deck[k],deck[j]]=[deck[j],deck[k]];} i=0;flipped=false;render(); }
-  function resetOrder(){ rebuild(); }
+function render() {
+  const card = cards[state.category][state.order[state.index]];
+  elQuestion.innerHTML = card.q;
+  elAnswer.innerHTML = card.a;
+  elCurrent.textContent = state.index + 1;
+  elTotal.textContent = cards[state.category].length;
+  elCard.classList.remove('flipped');
+  const label = state.category === 'theorie' ? 'Théorie' : 'Manips QUCS';
+  elCatLabel.textContent = label;
+  elCatLabel2.textContent = label;
+  const pct = ((state.index + 1) / cards[state.category].length) * 100;
+  elProgress.style.width = pct + '%';
+}
 
-  // clavier (desktop)
-  document.addEventListener('keydown', e=>{
-    if(e.key==='ArrowRight') next();
-    else if(e.key==='ArrowLeft') prev();
-    else if(e.key===' '||e.key==='Enter'){e.preventDefault();flip();}
+function next() {
+  state.index = (state.index + 1) % cards[state.category].length;
+  render();
+}
+
+function prev() {
+  state.index = (state.index - 1 + cards[state.category].length) % cards[state.category].length;
+  render();
+}
+
+function flip() {
+  elCard.classList.toggle('flipped');
+}
+
+function switchCategory(cat) {
+  if (cat === state.category) return;
+  state.category = cat;
+  state.index = 0;
+  initOrder();
+  document.body.setAttribute('data-cat', cat);
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.cat === cat);
   });
+  render();
+}
 
-  // swipe (mobile)
-  let x0=null;
-  const stage=document.querySelector('.stage');
-  stage.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
-  stage.addEventListener('touchend',e=>{
-    if(x0===null)return; const dx=e.changedTouches[0].clientX-x0;
-    if(Math.abs(dx)>55){ dx<0?next():prev(); } x0=null;
-  },{passive:true});
+document.getElementById('prev').addEventListener('click', (e) => { e.stopPropagation(); prev(); });
+document.getElementById('next').addEventListener('click', (e) => { e.stopPropagation(); next(); });
+document.getElementById('flip').addEventListener('click', (e) => { e.stopPropagation(); flip(); });
+document.getElementById('shuffle').addEventListener('click', (e) => { e.stopPropagation(); shuffle(); });
+elCard.addEventListener('click', flip);
 
-  // démarrage : attendre KaTeX
-  function start(){ render(); }
-  if(window.renderMathInElement) start();
-  else window.addEventListener('load', start);
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => switchCategory(tab.dataset.cat));
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  else if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
+  else if (e.key === ' ') { e.preventDefault(); flip(); }
+  else if (e.key === 's' || e.key === 'S') { shuffle(); }
+  else if (e.key === '1') { switchCategory('theorie'); }
+  else if (e.key === '2') { switchCategory('manips'); }
+});
+
+initOrder();
+render();
 </script>
 </body>
 </html>
